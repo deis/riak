@@ -1,0 +1,37 @@
+#!/bin/sh
+
+RIAK_BACKEND=${RIAK_BACKEND:-bitcask}
+
+IP_ADDRESS=$(ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
+
+# Ensure correct ownership and permissions on volumes
+chown riak:riak /var/lib/riak /var/log/riak
+chmod 755 /var/lib/riak /var/log/riak
+
+# Open file descriptor limit
+ulimit -n 4096
+
+# Ensure the Erlang node name is set correctly
+sed -i.bak "s/riak@127.0.0.1/riak@${IP_ADDRESS}/" /etc/riak/riak.conf
+
+# Ensure the desired Riak backend is set correctly
+sed -i.bak "s/storage_backend = \(.*\)/storage_backend = ${RIAK_BACKEND}/" /etc/riak/riak.conf
+
+if env | grep -q "RIAK_INET_DIST_MIN"; then
+  echo "erlang.distribution.port_range.minimum = ${RIAK_INET_DIST_MIN}" >> /etc/riak/riak.conf
+  echo "erlang.distribution.port_range.maximum = ${RIAK_INET_DIST_MAX}" >> /etc/riak/riak.conf
+fi
+
+# Start Riak
+"$(ls -d /usr/lib/riak/erts*)/bin/run_erl" "/tmp/riak" "/var/log/riak" "exec /usr/sbin/riak console" &
+
+# wait for riak to come up locally
+sleep 5
+
+# Connect to the master if we're a slave
+if ! $(env | grep -q "RIAK_BOOTSTRAP_POD=1"); then
+  CLUSTER_IP="$(host riak-discovery | head -n 1 | awk '{print $4}')"
+  riak-admin cluster join "riak@$CLUSTER_IP"
+fi
+
+wait
