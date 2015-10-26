@@ -1,5 +1,7 @@
 # Riak
 
+[![Build Status](https://travis-ci.org/deis/riak.svg?branch=master)](https://travis-ci.org/deis/riak)
+
 This is a project for running Riak in a kubernetes cluster.
 
 ## Usage
