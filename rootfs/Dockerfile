@@ -3,7 +3,7 @@ FROM ubuntu:14.04
 ENV RIAK_VERSION 2.0.2-1
 
 RUN \
-	apt-get update && apt-get install -y curl dnsutils && \
+    apt-get update && apt-get install -y curl dnsutils && \
 
     # Install Riak
     curl https://packagecloud.io/install/repositories/basho/riak/script.deb.sh | bash && \
