@@ -13,14 +13,15 @@ BINDIR := ./rootfs
 
 # Legacy support for DEV_REGISTRY, plus new support for DEIS_REGISTRY.
 DEV_REGISTRY ?= $(eval docker-machine ip deis):5000
-DEIS_REGISTY ?= ${DEV_REGISTRY}
+DEIS_REGISTY ?= ${DEV_REGISTRY}/
+IMAGE_PREFIX ?= deis
 
 # Kubernetes-specific information for RC, Service, and Image.
 BOOTSTRAP := manifests/${SHORT_NAME}-bootstrap-pod.yaml
 RC := manifests/${SHORT_NAME}-rc.yaml
 SVC := manifests/${SHORT_NAME}-service.yaml
 DISCO_SVC := manifests/${SHORT_NAME}-discovery-service.yaml
-IMAGE := ${DEIS_REGISTRY}/deis/${SHORT_NAME}:${VERSION}
+IMAGE := ${DEIS_REGISTRY}${IMAGE_PREFIX}/${SHORT_NAME}:${VERSION}
 
 all: docker-build docker-push
 
