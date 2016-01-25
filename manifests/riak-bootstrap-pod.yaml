@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: riak-bootstrap
+  name: deis-riak-bootstrap
   namespace: deis
   labels:
     name: riak
