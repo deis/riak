@@ -6,7 +6,7 @@ SHORT_NAME := riak
 
 # SemVer with build information is defined in the SemVer 2 spec, but Docker
 # doesn't allow +, so we use -.
-VERSION := 0.0.1-$(shell date "+%Y%m%d%H%M%S")
+VERSION ?= git-$(shell git rev-parse --short HEAD)
 
 # Docker Root FS
 BINDIR := ./rootfs
