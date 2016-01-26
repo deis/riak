@@ -44,6 +44,10 @@ if ! $(env | grep -q "RIAK_MASTER=1"); then
   sleep $RIAK_JOIN_WAIT_TIME
   echo "Joining to cluster with IP ${CLUSTER_IP}"
   riak-admin cluster join "riak@${CLUSTER_IP}"
+  if [ "$?" != "0" ]; then
+    echo "cluster join failed with code $?, exiting"
+    exit $?
+  fi
 fi
 
 wait
