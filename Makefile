@@ -10,6 +10,15 @@ VERSION ?= git-$(shell git rev-parse --short HEAD)
 
 # Docker Root FS
 BINDIR := ./rootfs
+BINARY_DEST_DIR := ${BINDIR}/bin
+LDFLAGS := "-s -X main.version=${VERSION}"
+
+# Dockerized development environment variables
+REPO_PATH := github.com/deis/${SHORT_NAME}
+DEV_ENV_IMAGE := quay.io/deis/go-dev:0.3.0
+DEV_ENV_WORK_DIR := /go/src/${REPO_PATH}
+DEV_ENV_PREFIX := docker run --rm -e GO15VENDOREXPERIMENT=1 -v ${CURDIR}:${DEV_ENV_WORK_DIR} -w ${DEV_ENV_WORK_DIR}
+DEV_ENV_CMD := ${DEV_ENV_PREFIX} ${DEV_ENV_IMAGE}
 
 # Legacy support for DEV_REGISTRY, plus new support for DEIS_REGISTRY.
 DEV_REGISTRY ?= $(eval docker-machine ip deis):5000
@@ -23,7 +32,16 @@ SVC := manifests/${SHORT_NAME}-service.yaml
 DISCO_SVC := manifests/${SHORT_NAME}-discovery-service.yaml
 IMAGE := ${DEIS_REGISTRY}${IMAGE_PREFIX}/${SHORT_NAME}:${VERSION}
 
-all: docker-build docker-push
+all: build docker-build docker-push
+
+bootstrap:
+		${DEV_ENV_CMD} glide install
+
+glideup:
+		${DEV_ENV_CMD} glide up
+
+build:
+	${DEV_ENV_PREFIX} -e CGO_ENABLED=0 ${DEV_ENV_IMAGE} go build -a -installsuffix cgo -ldflags ${LDFLAGS} -o ${BINARY_DEST_DIR}/boot boot.go
 
 # For cases where we're building from local
 # We also alter the RC file to set the image name.
