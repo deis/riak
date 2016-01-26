@@ -20,8 +20,8 @@ other, but the transaction hasn't yet been completed. To commit these changes so
 start replicating data, run
 
 ```
-$ kubectl exec riak-bootstrap riak-admin cluster plan
-$ kubectl exec riak-bootstrap riak-admin cluster commit
+$ kubectl exec deis-riak-bootstrap riak-admin cluster plan
+$ kubectl exec deis-riak-bootstrap riak-admin cluster commit
 ```
 
 ## Debugging
@@ -29,7 +29,7 @@ $ kubectl exec riak-bootstrap riak-admin cluster commit
 To see what's going on in your Riak cluster, feel free to poke and prod it by running
 
 ```
-$ kubectl exec $SOME_POD_NAME riak-admin member-status
+$ kubectl exec $DEIS_RIAK_POD_NAME riak-admin member-status
 ================================= Membership ==================================
 Status     Ring    Pending    Node
 -------------------------------------------------------------------------------
@@ -49,19 +49,19 @@ You should have 3 replicas of riak available after deploying initially. To scale
 with
 
 ```
-$ kubectl scale rc riak --replicas=10
+$ kubectl scale rc deis-riak --replicas=10
 ```
 
 Wait for all the replicas to come up, then
 
 ```
-$ kubectl exec $SOME_POD_NAME riak-admin cluster plan
+$ kubectl exec $DEIS_RIAK_POD_NAME riak-admin cluster plan
 ```
 
 Review the changes are fit to your desire, then
 
 ```
-$ kubectl exec $SOME_POD_NAME riak-admin cluster commit
+$ kubectl exec $DEIS_RIAK_POD_NAME riak-admin cluster commit
 ```
 
 To commit those changes.

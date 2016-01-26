@@ -30,7 +30,7 @@ sleep 5
 
 # Connect to the master if we're a slave
 if ! $(env | grep -q "RIAK_MASTER=1"); then
-  CLUSTER_IP="$(host riak-discovery | head -n 1 | awk '{print $4}')"
+  CLUSTER_IP="$(host deis-riak-discovery | head -n 1 | awk '{print $4}')"
   riak-admin cluster join "riak@$CLUSTER_IP"
 fi
 

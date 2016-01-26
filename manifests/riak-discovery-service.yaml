@@ -1,7 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: riak-discovery
+  name: deis-riak-discovery
+  namespace: deis
   labels:
     heritage: deis
 spec:
