@@ -23,9 +23,14 @@ spec:
               value: "6001"
             - name:  RIAK_INET_DIST_MAX
               value: "6001"
+            - name: RIAK_JOIN_WAIT_TIME
+              value: "5"
+            - name: PLANSRV_HTTP_PORT
+              value: "8080"
           ports:
             - containerPort: 4369
             - containerPort: 6001
             - containerPort: 8087
             - containerPort: 8098
             - containerPort: 8099
+            - containerPort: 8080

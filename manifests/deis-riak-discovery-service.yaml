@@ -27,6 +27,10 @@ spec:
       targetPort: 8099
       name: handoff
       protocol: TCP
+    - port: 8080
+      targetPort: 8080
+      name: plansrv
+      protocol: TCP
   selector:
     name: riak
   clusterIP: None
