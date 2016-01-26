@@ -23,6 +23,8 @@ spec:
               value: "6001"
             - name:  RIAK_INET_DIST_MAX
               value: "6001"
+            - name: RIAK_JOIN_WAIT_TIME
+              value: "5"
           ports:
             - containerPort: 4369
             - containerPort: 6001
