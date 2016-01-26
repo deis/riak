@@ -22,15 +22,19 @@ if env | grep -q "RIAK_INET_DIST_MIN"; then
   echo "erlang.distribution.port_range.maximum = ${RIAK_INET_DIST_MAX}" >> /etc/riak/riak.conf
 fi
 
+echo "Starting Riak..."
 # Start Riak
 "$(ls -d /usr/lib/riak/erts*)/bin/run_erl" "/tmp/riak" "/var/log/riak" "exec /usr/sbin/riak console" &
 
 # wait for riak to come up locally
 sleep 5
 
+echo "started"
+
 # Connect to the master if we're a slave
 if ! $(env | grep -q "RIAK_MASTER=1"); then
   CLUSTER_IP="$(host deis-riak-discovery | head -n 1 | awk '{print $4}')"
+  echo "joining node with ${CLUSTER_IP}"
   riak-admin cluster join "riak@$CLUSTER_IP"
 fi
 
