@@ -16,12 +16,15 @@ spec:
     spec:
       containers:
         - name: riak
-          image: deis/riak:0.1.0
+          image: quay.io/deisci/riak:v2-beta
+          imagePullPolicy: Always
           env:
             - name:  RIAK_INET_DIST_MIN
               value: "6001"
             - name:  RIAK_INET_DIST_MAX
               value: "6001"
+            - name: RIAK_JOIN_WAIT_TIME
+              value: "5"
           ports:
             - containerPort: 4369
             - containerPort: 6001
