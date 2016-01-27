@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: deis-riak-cluster
+  namespace: deis
+  labels:
+    heritage: deis
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+      name: http
+      protocol: TCP
+  selector:
+    cluster_server: "true"

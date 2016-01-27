@@ -26,10 +26,12 @@ DEIS_REGISTY ?= ${DEV_REGISTRY}/
 IMAGE_PREFIX ?= deis
 
 # Kubernetes-specific information for RC, Service, and Image.
-BOOTSTRAP := manifests/${SHORT_NAME}-bootstrap-pod.yaml
-RC := manifests/${SHORT_NAME}-rc.yaml
-SVC := manifests/${SHORT_NAME}-service.yaml
-DISCO_SVC := manifests/${SHORT_NAME}-discovery-service.yaml
+BOOTSTRAP := manifests/deis-${SHORT_NAME}-bootstrap-pod.yaml
+RC := manifests/deis-${SHORT_NAME}-rc.yaml
+SVC := manifests/deis-${SHORT_NAME}-service.yaml
+DISCO_SVC := manifests/deis-${SHORT_NAME}-discovery-service.yaml
+CLUSTER_SVC := manifests/deis-${SHORT_NAME}-cluster-service.yaml
+
 IMAGE := ${DEIS_REGISTRY}${IMAGE_PREFIX}/${SHORT_NAME}:${VERSION}
 
 all: build docker-build docker-push
@@ -62,6 +64,7 @@ deploy: kube-service kube-rc
 kube-service:
 	kubectl create -f ${SVC}
 	kubectl create -f ${DISCO_SVC}
+	kubectl create -f ${CLUSTER_SVC}
 
 # When possible, we deploy with RCs.
 kube-rc:
@@ -73,5 +76,6 @@ kube-clean:
 	kubectl delete -f ${RC}
 	kubectl delete -f ${SVC}
 	kubectl delete -f ${DISCO_SVC}
+	kubectl delete -f ${CLUSTER_SVC}
 
 .PHONY: all build docker-compile kube-up kube-down deploy
