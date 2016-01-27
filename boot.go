@@ -23,7 +23,9 @@ func main() {
 		bootCmd.Stderr = os.Stderr
 		if err := bootCmd.Run(); err != nil {
 			cmdDoneCh <- err
+			return
 		}
+		close(cmdDoneCh)
 	}()
 
 	serverDoneCh := make(chan error)

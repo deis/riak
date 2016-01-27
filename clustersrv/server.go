@@ -18,5 +18,7 @@ func Start(port int, doneCh chan<- error) {
 
 	if err := http.ListenAndServe(hostStr, router); err != nil {
 		doneCh <- err
+		return
 	}
+	close(doneCh)
 }
