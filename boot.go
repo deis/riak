@@ -10,6 +10,7 @@ import (
 	"sync"
 
 	"github.com/deis/riak/clustersrv"
+	"github.com/gorilla/mux"
 )
 
 const (
@@ -31,16 +32,18 @@ func main() {
 	if os.Getenv("RIAK_MASTER") == "1" {
 		go func() {
 			var mut sync.Mutex
+			lockID := clustersrv.NewLockID()
 			httpPort, err := strconv.Atoi(os.Getenv(clusterServerPortEnvVar))
 			if err != nil {
 				httpPort = clustersrv.DefaultHTTPPort
 			}
 			hostStr := fmt.Sprintf(":%d", httpPort)
 			log.Printf("Serving cluster planner on %s", hostStr)
-			mux := http.NewServeMux()
-			mux.Handle("/plan_and_commit", clustersrv.NewPlanAndCommitHandler(&mut))
+			router := mux.NewRouter()
+			router.Handle(clustersrv.StartHandlerPath(), clustersrv.NewStartHandler(&mut, lockID)).Methods("POST")
+			router.Handle(clustersrv.EndHandlerPath(), clustersrv.NewEndHandler(&mut, lockID)).Methods("DELETE")
 
-			if err := http.ListenAndServe(hostStr, mux); err != nil {
+			if err := http.ListenAndServe(hostStr, router); err != nil {
 				serverDoneCh <- err
 			}
 		}()
