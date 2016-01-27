@@ -25,8 +25,6 @@ spec:
               value: "6001"
             - name: RIAK_JOIN_WAIT_TIME
               value: "5"
-            - name: PLANSRV_HTTP_PORT
-              value: "8080"
           ports:
             - containerPort: 4369
             - containerPort: 6001
