@@ -3,14 +3,11 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 	"os/exec"
 	"strconv"
-	"sync"
 
 	"github.com/deis/riak/clustersrv"
-	"github.com/gorilla/mux"
 )
 
 const (
@@ -30,23 +27,13 @@ func main() {
 
 	serverDoneCh := make(chan error)
 	if os.Getenv("RIAK_MASTER") == "1" {
-		go func() {
-			var mut sync.Mutex
-			lockID := clustersrv.NewLockID()
-			httpPort, err := strconv.Atoi(os.Getenv(clusterServerPortEnvVar))
-			if err != nil {
-				httpPort = clustersrv.DefaultHTTPPort
-			}
-			hostStr := fmt.Sprintf(":%d", httpPort)
-			log.Printf("Serving cluster planner on %s", hostStr)
-			router := mux.NewRouter()
-			router.Handle(clustersrv.StartHandlerPath(), clustersrv.NewStartHandler(&mut, lockID)).Methods("POST")
-			router.Handle(clustersrv.EndHandlerPath(), clustersrv.NewEndHandler(&mut, lockID)).Methods("DELETE")
-
-			if err := http.ListenAndServe(hostStr, router); err != nil {
-				serverDoneCh <- err
-			}
-		}()
+		httpPort, err := strconv.Atoi(os.Getenv(clusterServerPortEnvVar))
+		if err != nil {
+			httpPort = clustersrv.DefaultHTTPPort
+		}
+		hostStr := fmt.Sprintf(":%d", httpPort)
+		log.Printf("Serving cluster planner on %s", hostStr)
+		go clustersrv.Start(httpPort, serverDoneCh)
 	}
 
 	select {
