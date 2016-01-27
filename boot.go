@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"strconv"
 
+	"github.com/deis/riak/chans"
 	"github.com/deis/riak/clustersrv"
 )
 
@@ -36,12 +37,8 @@ func main() {
 		go clustersrv.Start(httpPort, serverDoneCh)
 	}
 
-	select {
-	case err := <-cmdDoneCh:
-		log.Printf("Error running riak start script (%s)", err)
-		os.Exit(1)
-	case err := <-serverDoneCh:
-		log.Printf("Error running plan/commit server (%s)", err)
+	if err := chans.JoinErrs(serverDoneCh, cmdDoneCh); err != nil {
+		log.Println(err)
 		os.Exit(1)
 	}
 }
