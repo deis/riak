@@ -5,11 +5,11 @@ import (
 	"sync"
 )
 
-func StartHandlerPath() string {
-	return "/start"
+func lockHandlerPath() string {
+	return "/lock"
 }
 
-func NewStartHandler(mut *sync.Mutex, lockID *LockID) http.Handler {
+func newLockHandler(mut *sync.Mutex, lockID *LockID) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		mut.Lock()
 		w.WriteHeader(http.StatusOK)

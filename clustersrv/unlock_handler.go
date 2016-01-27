@@ -11,11 +11,11 @@ const (
 	lockIDKey = "lock_id"
 )
 
-func EndHandlerPath() string {
-	return "/end/{" + lockIDKey + "}"
+func unlockHandlerPath() string {
+	return "/unlock/{" + lockIDKey + "}"
 }
 
-func NewEndHandler(mut *sync.Mutex, lockID *LockID) http.Handler {
+func newUnlockHandler(mut *sync.Mutex, lockID *LockID) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		lid, ok := mux.Vars(r)[lockIDKey]
 		if !ok {
