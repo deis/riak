@@ -17,11 +17,15 @@ func NewPlanAndCommitHandler(mut *sync.Mutex) http.Handler {
 			http.Error(w, string(planOut), http.StatusInternalServerError)
 			return
 		}
+		log.Printf("Cluster successfully planned")
+		log.Println(string(planOut))
 		commitOut, err := commitCmd.CombinedOutput()
 		if err != nil {
 			http.Error(w, string(commitOut), http.StatusInternalServerError)
 			return
 		}
+		log.Printf("Cluster successfully committed")
+		log.Println(string(planOut))
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("ok"))
 	})
