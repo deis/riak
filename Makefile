@@ -34,6 +34,8 @@ CLUSTER_SVC := manifests/deis-${SHORT_NAME}-cluster-service.yaml
 
 IMAGE := ${DEIS_REGISTRY}${IMAGE_PREFIX}/${SHORT_NAME}:${VERSION}
 
+TEST_PACKAGES := $(shell ${DEV_ENV_CMD} glide nv)
+
 all: build docker-build docker-push
 
 bootstrap:
@@ -44,6 +46,9 @@ glideup:
 
 build:
 	${DEV_ENV_PREFIX} -e CGO_ENABLED=0 ${DEV_ENV_IMAGE} go build -a -installsuffix cgo -ldflags ${LDFLAGS} -o ${BINARY_DEST_DIR}/boot boot.go
+
+test:
+	${DEV_ENV_CMD} go test -race ${TEST_PACKAGES}
 
 # For cases where we're building from local
 # We also alter the RC file to set the image name.
