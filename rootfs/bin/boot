@@ -4,10 +4,6 @@ RIAK_BACKEND=${RIAK_BACKEND:-bitcask}
 
 IP_ADDRESS=$(ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
 
-if [ -z "$RIAK_JOIN_WAIT_TIME" ]; then
-  RIAK_JOIN_WAIT_TIME=5
-fi
-
 # Ensure correct ownership and permissions on volumes
 chown riak:riak /var/lib/riak /var/log/riak
 chmod 755 /var/lib/riak /var/log/riak
@@ -40,10 +36,12 @@ if ! $(env | grep -q "RIAK_MASTER=1"); then
   DISCOVERY_HOSTS="$(host deis-riak-discovery)"
   echo "Discovery Hosts: ${DISCOVERY_HOSTS}"
   CLUSTER_IP="$(host deis-riak-discovery | head -n 1 | awk '{print $4}')"
-  echo "Waiting ${RIAK_JOIN_WAIT_TIME} seconds before attempting to join cluster"
-  sleep $RIAK_JOIN_WAIT_TIME
   echo "Joining to cluster with IP ${CLUSTER_IP}"
   riak-admin cluster join "riak@${CLUSTER_IP}"
+  if [ "$?" != "0" ]; then
+    echo "cluster join failed with code $?, exiting"
+    exit $?
+  fi
 fi
 
 wait
