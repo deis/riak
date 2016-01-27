@@ -1,6 +1,7 @@
 package clustersrv
 
 import (
+	"log"
 	"net/http"
 	"os/exec"
 	"sync"
