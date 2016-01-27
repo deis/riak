@@ -9,6 +9,7 @@ import (
 
 	"github.com/deis/riak/chans"
 	"github.com/deis/riak/clustersrv"
+	"github.com/deis/riak/riak"
 )
 
 const (
@@ -17,16 +18,7 @@ const (
 
 func main() {
 	cmdDoneCh := make(chan error)
-	go func() {
-		bootCmd := exec.Command("/bin/start_riak")
-		bootCmd.Stdout = os.Stdout
-		bootCmd.Stderr = os.Stderr
-		if err := bootCmd.Run(); err != nil {
-			cmdDoneCh <- err
-			return
-		}
-		close(cmdDoneCh)
-	}()
+	go riak.Start(cmdDoneCh)
 
 	serverDoneCh := make(chan error)
 	if os.Getenv("RIAK_MASTER") == "1" {
