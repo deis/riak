@@ -29,7 +29,7 @@ $ kubectl --namespace=deis exec deis-riak-bootstrap riak-admin cluster commit
 To see what's going on in your Riak cluster, feel free to poke and prod it by running
 
 ```
-$ kubectl --namespace=deis exec $DEIS_RIAK_POD_NAME riak-admin member-status
+$ kubectl --namespace=deis exec deis-riak-bootstrap riak-admin member-status
 ================================= Membership ==================================
 Status     Ring    Pending    Node
 -------------------------------------------------------------------------------
