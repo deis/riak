@@ -31,4 +31,3 @@ spec:
             - containerPort: 8087
             - containerPort: 8098
             - containerPort: 8099
-            - containerPort: 8080
