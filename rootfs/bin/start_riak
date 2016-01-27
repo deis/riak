@@ -42,6 +42,12 @@ if ! $(env | grep -q "RIAK_MASTER=1"); then
     echo "cluster join failed with code $?, exiting"
     exit $?
   fi
+  echo "Requesting lock to start cluster plan & commit"
+  LOCK_ID=$(curl -XPOST ${DEIS_RIAK_CLUSTER_SERVICE_HOST}:${DEIS_RIAK_CLUSTER_SERVICE_PORT}/start)
+  echo "Got lock ID ${LOCK_ID}"
+  riak-admin cluster plan
+  riak-admin cluster commit
+  curl -XDELETE ${DEIS_RIAK_CLUSTER_SERVICE_HOST}:${DEIS_RIAK_CLUSTER_SERVICE_PORT}/end/${LOCK_ID}
 fi
 
 wait
