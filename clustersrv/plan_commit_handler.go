@@ -9,6 +9,10 @@ import (
 
 func NewPlanAndCommitHandler(mut *sync.Mutex) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("you must POST to this endpoint"))
+		}
 		mut.Lock()
 		defer mut.Unlock()
 		planCmd := exec.Command("riak-admin", "cluster", "plan")
