@@ -9,7 +9,11 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/deis/riak/plansrv"
+	"github.com/deis/riak/clustersrv"
+)
+
+const (
+	clusterServerPortEnvVar = "CLUSTER_SERVER_HTTP_PORT"
 )
 
 func main() {
@@ -27,14 +31,14 @@ func main() {
 	if os.Getenv("RIAK_MASTER") == "1" {
 		go func() {
 			var mut sync.Mutex
-			httpPort, err := strconv.Atoi(os.Getenv("PLANSRV_HTTP_PORT"))
+			httpPort, err := strconv.Atoi(os.Getenv(clusterServerPortEnvVar))
 			if err != nil {
-				httpPort = plansrv.DefaultHTTPPort
+				httpPort = clustersrv.DefaultHTTPPort
 			}
 			hostStr := fmt.Sprintf(":%d", httpPort)
 			log.Printf("Serving cluster planner on %s", hostStr)
 			mux := http.NewServeMux()
-			mux.Handle("/plan_and_commit", plansrv.NewPlanAndCommitHandler(&mut))
+			mux.Handle("/plan_and_commit", clustersrv.NewPlanAndCommitHandler(&mut))
 
 			if err := http.ListenAndServe(hostStr, mux); err != nil {
 				serverDoneCh <- err

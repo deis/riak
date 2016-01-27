@@ -1,4 +1,4 @@
-package plansrv
+package clustersrv
 
 import (
 	"net/http"
