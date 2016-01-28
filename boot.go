@@ -23,7 +23,7 @@ func main() {
 		log.Printf("Starting as a member node")
 		// non-bootstrap nodes should start a riak server and join
 		go func() {
-			httpClient := http.Client{}
+			httpClient := &http.Client{}
 			clusterServerURL, err := clustersrv.ClusterServerURLFromEnv()
 			if err != nil {
 				cmdDoneCh <- err
