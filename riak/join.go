@@ -1,23 +1,13 @@
 package riak
 
 import (
-	"errors"
 	"fmt"
 	"log"
-	"net"
 	"net/http"
 	"os"
 	"os/exec"
 
 	"github.com/deis/riak/clustersrv"
-)
-
-const (
-	discoveryHostName = "deis-riak-discovery"
-)
-
-var (
-	ErrNoDiscoveryAddrs = errors.New("no discovery addresses found")
 )
 
 type ErrAcquireLock struct {
@@ -36,14 +26,10 @@ func (e ErrAcquireLock) Error() string {
 //
 // If lock acquisition failed, returns ErrAcquireLock. In all other cases, Join attempts to release the cluster level lock (and logs failures to do so) and returns. Any error returned other than ErrAcquireLock will be related to starting or executing /bin/join_riak.
 func Join(httpClient *http.Client, clusterServerBaseURL string) error {
-	discoveryAddrs, err := net.LookupHost(discoveryHostName)
+	discoveryAddr, err := getDiscoveryIP(discoveryHostName)
 	if err != nil {
 		return err
-	} else if len(discoveryAddrs) == 0 {
-		return ErrNoDiscoveryAddrs
 	}
-
-	discoveryAddr := discoveryAddrs[0]
 	log.Printf("Got %s IP %s", discoveryHostName, discoveryAddr)
 
 	log.Printf("Attempting to acquire cluster lock")
