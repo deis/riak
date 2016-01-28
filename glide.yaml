@@ -1,5 +1,6 @@
 package: github.com/deis/riak
 import:
-  - package: github.com/gorilla/mux
-  - package: github.com/pborman/uuid
-  - package: github.com/kelseyhightower/envconfig
+- package: github.com/gorilla/mux
+- package: github.com/pborman/uuid
+- package: github.com/kelseyhightower/envconfig
+- package: github.com/arschles/assert
