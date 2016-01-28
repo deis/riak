@@ -31,12 +31,12 @@ func main() {
 				return
 			}
 
-			if err := riak.Start(); err != nil {
+			if err := riak.Start(false); err != nil {
 				cmdDoneCh <- err
 				return
 			}
 
-			if err := riak.Join(httpClient, clusterServerURL); err != nil {
+			if err := riak.Join(httpClient, clusterServerURL, true); err != nil {
 				cmdDoneCh <- err
 				return
 			}
@@ -47,7 +47,7 @@ func main() {
 		log.Printf("Starting as a bootstrap node")
 
 		go func() {
-			if err := riak.Start(); err != nil {
+			if err := riak.Start(true); err != nil {
 				cmdDoneCh <- err
 				return
 			}

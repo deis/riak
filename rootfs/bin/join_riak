@@ -19,3 +19,7 @@ if [ "$?" != "0" ]; then
   echo "failed to commit cluster with code $?, exiting"
   exit $?
 fi
+
+if [ "$WAIT_AFTER_JOIN" == "1" ]; then
+  wait
+fi
