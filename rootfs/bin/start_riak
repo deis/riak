@@ -30,7 +30,3 @@ echo "Starting Riak..."
 sleep 5
 
 echo "started"
-
-if [ "$WAIT_AFTER_START" == "1" ]; then
-  wait
-fi
