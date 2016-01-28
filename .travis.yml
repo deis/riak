@@ -4,6 +4,7 @@ services:
   - docker
 
 before_install:
+  - make build
   - docker build -t deis/riak rootfs
   - docker run -d -e RIAK_MASTER=1 --name riak-master deis/riak
   - sleep 5
