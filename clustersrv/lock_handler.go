@@ -5,8 +5,6 @@ import (
 	"sync"
 )
 
-func lockHandlerPath() string {
-	return "/lock"
 }
 
 func newLockHandler(mut *sync.Mutex, lockID *LockID) http.Handler {

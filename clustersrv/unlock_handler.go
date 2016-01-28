@@ -11,8 +11,8 @@ const (
 	lockIDKey = "lock_id"
 )
 
-func unlockHandlerPath() string {
-	return "/lock/{" + lockIDKey + "}"
+func registerUnlockHandler(r *mux.Router, mut *sync.Mutex, lockID *LockID) {
+	r.Handle("/lock{"+lockIDKey+"}", newUnlockHandler(mut, lockID)).Methods("DELETE")
 }
 
 func newUnlockHandler(mut *sync.Mutex, lockID *LockID) http.Handler {
