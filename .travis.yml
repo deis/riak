@@ -11,3 +11,4 @@ before_install:
 
 script:
   - docker exec riak-master riak ping
+  - make test
