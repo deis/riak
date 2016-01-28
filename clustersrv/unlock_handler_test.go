@@ -33,6 +33,7 @@ func TestUnlockNotLocked(t *testing.T) {
 
 func TestUnlockAlreadyLocked(t *testing.T) {
 	mut := new(sync.Mutex)
+	mut.Lock()
 	lockID := NewLockID()
 	lockID.Generate()
 	router := mux.NewRouter()
