@@ -12,7 +12,7 @@ const (
 )
 
 func registerUnlockHandler(r *mux.Router, mut *sync.Mutex, lockID *LockID) {
-	r.Handle("/lock{"+lockIDKey+"}", newUnlockHandler(mut, lockID)).Methods("DELETE")
+	r.Handle("/lock/{"+lockIDKey+"}", newUnlockHandler(mut, lockID)).Methods("DELETE")
 }
 
 func newUnlockHandler(mut *sync.Mutex, lockID *LockID) http.Handler {
