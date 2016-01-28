@@ -19,13 +19,7 @@ func TestUnlockNotLocked(t *testing.T) {
 	registerUnlockHandler(router, mut, lockID)
 
 	w := httptest.NewRecorder()
-	r, err := http.NewRequest("DELETE", "/lock", bytes.NewReader(nil))
-	assert.NoErr(t, err)
-	router.ServeHTTP(w, r)
-	assert.Equal(t, w.Code, http.StatusBadRequest, "response code")
-
-	w := httptest.NewRecorder()
-	r, err = http.NewRequest("DELETE", "/lock/noexist", bytes.NewReader(nil))
+	r, err := http.NewRequest("DELETE", "/lock/noexist", bytes.NewReader(nil))
 	assert.NoErr(t, err)
 	router.ServeHTTP(w, r)
 	assert.Equal(t, w.Code, http.StatusBadRequest, "response code")
