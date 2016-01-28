@@ -36,7 +36,7 @@ func main() {
 				return
 			}
 
-			if err := riak.Join(httpClient, clusterServerURL, true); err != nil {
+			if err := riak.Join(httpClient, clusterServerURL); err != nil {
 				cmdDoneCh <- err
 				return
 			}
