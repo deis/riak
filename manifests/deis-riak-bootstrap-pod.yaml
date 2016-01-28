@@ -20,7 +20,7 @@ spec:
         - name:  RIAK_MASTER
           value: "1"
         - name: CLUSTER_SERVER_HTTP_PORT
-          value: "8080"
+          value: "8081"
       ports:
         - containerPort: 4369
         - containerPort: 6001
