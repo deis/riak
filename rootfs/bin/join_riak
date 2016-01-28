@@ -1,0 +1,21 @@
+#!/bin/sh
+
+DISCOVERY_HOSTS="$(host deis-riak-discovery)"
+echo "Discovery Hosts: ${DISCOVERY_HOSTS}"
+CLUSTER_IP="$(host deis-riak-discovery | head -n 1 | awk '{print $4}')"
+echo "Joining to cluster with IP ${CLUSTER_IP}"
+riak-admin cluster join "riak@${CLUSTER_IP}"
+if [ "$?" != "0" ]; then
+  echo "cluster join failed with code $?, exiting"
+  exit $?
+fi
+riak-admin cluster plan
+if [ "$?" != "0" ]; then
+  echo "failed to plan cluster with code $?, exiting"
+  exit $?
+fi
+riak-admin cluster commit
+if [ "$?" != "0" ]; then
+  echo "failed to commit cluster with code $?, exiting"
+  exit $?
+fi

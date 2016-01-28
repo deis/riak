@@ -12,7 +12,7 @@ const (
 )
 
 func unlockHandlerPath() string {
-	return "/unlock/{" + lockIDKey + "}"
+	return "/lock/{" + lockIDKey + "}"
 }
 
 func newUnlockHandler(mut *sync.Mutex, lockID *LockID) http.Handler {
