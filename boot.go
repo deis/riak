@@ -30,7 +30,7 @@ func main() {
 				return
 			}
 
-			if err := riak.Start(cmdDoneCh); err != nil {
+			if err := riak.Start(); err != nil {
 				cmdDoneCh <- err
 				return
 			}
@@ -45,7 +45,7 @@ func main() {
 		log.Printf("Starting as a bootstrap node")
 		// bootstrap nodes should just start a riak server
 		go func() {
-			if err := riak.Start(cmdDoneCh); err != nil {
+			if err := riak.Start(); err != nil {
 				cmdDoneCh <- err
 				return
 			}
