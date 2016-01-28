@@ -38,8 +38,11 @@ func Join(httpClient *http.Client, clusterServerBaseURL string) error {
 		return &ErrAcquireLock{origErr: err}
 	}
 	defer func() {
+		log.Printf("Attempting to release the cluster lock")
 		if err := clustersrv.ReleaseLock(httpClient, clusterServerBaseURL, lockID); err != nil {
 			log.Printf("Error releasing lock ID %s (%s)", lockID, err)
+		} else {
+			log.Printf("... released")
 		}
 	}()
 	log.Printf("... acquired")
