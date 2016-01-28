@@ -3,8 +3,12 @@ package clustersrv
 import (
 	"net/http"
 	"sync"
+
+	"github.com/gorilla/mux"
 )
 
+func registerLockHandler(router *mux.Router, mut *sync.Mutex, lockID *LockID) {
+	router.Handle("/lock", newLockHandler(mut, lockID))
 }
 
 func newLockHandler(mut *sync.Mutex, lockID *LockID) http.Handler {
