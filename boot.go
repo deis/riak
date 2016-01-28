@@ -22,7 +22,7 @@ func main() {
 	serverDoneCh := make(chan error)
 	if !conf.RiakMaster {
 		// non-bootstrap nodes should start a riak server and join
-		log.Printf("Starting as a bootstrap node")
+		log.Printf("Starting as a non-bootstrap node")
 		go func() {
 			httpClient := &http.Client{}
 			clusterServerURL := clustersrv.URLFromConfig(conf)
