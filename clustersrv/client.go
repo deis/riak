@@ -28,7 +28,7 @@ func ClusterServerURLFromEnv() (string, error) {
 	if clusterSrvPort == "" {
 		return "", ErrMissingPortDiscoveryEnvVar
 	}
-	return clusterSrvHost + ":" + clusterSrvPort, nil
+	return "http://" + clusterSrvHost + ":" + clusterSrvPort, nil
 }
 
 func AcquireLock(httpClient *http.Client, clusterSrvURLBase string) (string, error) {
