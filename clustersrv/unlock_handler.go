@@ -26,6 +26,7 @@ func newUnlockHandler(mut *sync.Mutex, lockID *LockID) http.Handler {
 			http.Error(w, "invalid lock ID "+lid, http.StatusBadRequest)
 			return
 		}
+		w.WriteHeader(http.StatusOK)
 		mut.Unlock()
 	})
 }
