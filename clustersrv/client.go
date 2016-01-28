@@ -2,33 +2,16 @@ package clustersrv
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
+	"strconv"
+
+	"github.com/deis/riak/config"
 )
 
-const (
-	ClusterServerHostDiscoveryEnvVar = "DEIS_RIAK_CLUSTER_SERVICE_HOST"
-	ClusterServerPortDiscoveryEnvVar = "DEIS_RIAK_CLUSTER_SERVICE_PORT"
-)
-
-var (
-	ErrMissingHostDiscoveryEnvVar = errors.New("missing cluster server host environment variable")
-	ErrMissingPortDiscoveryEnvVar = errors.New("missing cluster server port environment variable")
-)
-
-func ClusterServerURLFromEnv() (string, error) {
-	clusterSrvHost := os.Getenv(ClusterServerHostDiscoveryEnvVar)
-	clusterSrvPort := os.Getenv(ClusterServerPortDiscoveryEnvVar)
-	if clusterSrvHost == "" {
-		return "", ErrMissingHostDiscoveryEnvVar
-	}
-	if clusterSrvPort == "" {
-		return "", ErrMissingPortDiscoveryEnvVar
-	}
-	return "http://" + clusterSrvHost + ":" + clusterSrvPort, nil
+func URLFromConfig(conf *config.Config) string {
+	return "http://" + conf.ClusterServerHost + ":" + strconv.Itoa(conf.ClusterServerPort)
 }
 
 func AcquireLock(httpClient *http.Client, clusterSrvURLBase string) (string, error) {

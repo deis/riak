@@ -1,30 +1,31 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 
 	"github.com/deis/riak/chans"
 	"github.com/deis/riak/clustersrv"
+	"github.com/deis/riak/config"
 	"github.com/deis/riak/riak"
 )
 
-const (
-	clusterServerPortEnvVar = "CLUSTER_SERVER_HTTP_PORT"
-	riakMasterEnvVar        = "RIAK_MASTER"
-)
-
 func main() {
+	conf, err := config.Get()
+	if err != nil {
+		log.Printf("Error getting config (%s)", err)
+		os.Exit(1)
+	}
+
 	cmdDoneCh := make(chan error)
-	if os.Getenv(riakMasterEnvVar) != "1" {
-		log.Printf("Starting as a member node")
+	serverDoneCh := make(chan error)
+	if !conf.RiakMaster {
 		// non-bootstrap nodes should start a riak server and join
+		log.Printf("Starting as a bootstrap node")
 		go func() {
 			httpClient := &http.Client{}
-			clusterServerURL, err := clustersrv.ClusterServerURLFromEnv()
+			clusterServerURL := clustersrv.URLFromConfig(conf)
 			if err != nil {
 				cmdDoneCh <- err
 				return
@@ -42,8 +43,9 @@ func main() {
 			close(cmdDoneCh)
 		}()
 	} else {
+		// bootstrap nodes should start (not join) a riak server and start the cluster server
 		log.Printf("Starting as a bootstrap node")
-		// bootstrap nodes should just start a riak server
+
 		go func() {
 			if err := riak.Start(); err != nil {
 				cmdDoneCh <- err
@@ -51,17 +53,8 @@ func main() {
 			}
 			close(cmdDoneCh)
 		}()
-	}
-
-	serverDoneCh := make(chan error)
-	if os.Getenv("RIAK_MASTER") == "1" {
-		httpPort, err := strconv.Atoi(os.Getenv(clusterServerPortEnvVar))
-		if err != nil {
-			httpPort = clustersrv.DefaultHTTPPort
-		}
-		hostStr := fmt.Sprintf(":%d", httpPort)
-		log.Printf("Serving cluster planner on %s", hostStr)
-		go clustersrv.Start(httpPort, serverDoneCh)
+		log.Printf("Cluster server starting on port %d", conf.ClusterServerHTTPPort)
+		go clustersrv.Start(conf.ClusterServerHTTPPort, serverDoneCh)
 	}
 
 	if err := chans.JoinErrs(serverDoneCh, cmdDoneCh); err != nil {
