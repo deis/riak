@@ -43,6 +43,9 @@ func Join(httpClient *http.Client, clusterServerBaseURL string) error {
 		return ErrNoDiscoveryAddrs
 	}
 
+	discoveryAddr := discoveryAddrs[0]
+	log.Printf("Got %s IP %s", discoveryHostName, discoveryAddr)
+
 	log.Printf("Attempting to acquire cluster lock")
 	lockID, err := clustersrv.AcquireLock(httpClient, clusterServerBaseURL)
 	if err != nil {
@@ -56,7 +59,7 @@ func Join(httpClient *http.Client, clusterServerBaseURL string) error {
 	log.Printf("... acquired")
 
 	log.Printf("Attempting to join the riak cluster")
-	joinCmd := exec.Command("riak-admin", "cluster", "join", "riak@"+discoveryAddrs[0])
+	joinCmd := exec.Command("riak-admin", "cluster", "join", "riak@"+discoveryAddr)
 	joinCmd.Stdout = os.Stdout
 	joinCmd.Stderr = os.Stderr
 	if err := joinCmd.Run(); err != nil {
