@@ -31,7 +31,7 @@ func main() {
 				return
 			}
 
-			if err := riak.Start(false); err != nil {
+			if err := riak.Start(); err != nil {
 				cmdDoneCh <- err
 				return
 			}
@@ -40,18 +40,16 @@ func main() {
 				cmdDoneCh <- err
 				return
 			}
-			close(cmdDoneCh)
 		}()
 	} else {
 		// bootstrap nodes should start (not join) a riak server and start the cluster server
 		log.Printf("Starting as a bootstrap node")
 
 		go func() {
-			if err := riak.Start(true); err != nil {
+			if err := riak.Start(); err != nil {
 				cmdDoneCh <- err
 				return
 			}
-			close(cmdDoneCh)
 		}()
 		log.Printf("Cluster server starting on port %d", conf.ClusterServerHTTPPort)
 		go clustersrv.Start(conf.ClusterServerHTTPPort, serverDoneCh)
