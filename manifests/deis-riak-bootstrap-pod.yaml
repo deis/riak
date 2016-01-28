@@ -5,6 +5,7 @@ metadata:
   namespace: deis
   labels:
     name: riak
+    cluster_server: "true"
     heritage: deis
 spec:
   containers:
@@ -18,9 +19,12 @@ spec:
           value: "6001"
         - name:  RIAK_MASTER
           value: "1"
+        - name: CLUSTER_SERVER_HTTP_PORT
+          value: "8080"
       ports:
         - containerPort: 4369
         - containerPort: 6001
         - containerPort: 8087
         - containerPort: 8098
         - containerPort: 8099
+        - containerPort: 8080

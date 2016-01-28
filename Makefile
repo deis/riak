@@ -10,6 +10,15 @@ VERSION ?= git-$(shell git rev-parse --short HEAD)
 
 # Docker Root FS
 BINDIR := ./rootfs
+BINARY_DEST_DIR := ${BINDIR}/bin
+LDFLAGS := "-s -X main.version=${VERSION}"
+
+# Dockerized development environment variables
+REPO_PATH := github.com/deis/${SHORT_NAME}
+DEV_ENV_IMAGE := quay.io/deis/go-dev:0.3.0
+DEV_ENV_WORK_DIR := /go/src/${REPO_PATH}
+DEV_ENV_PREFIX := docker run --rm -e GO15VENDOREXPERIMENT=1 -v ${CURDIR}:${DEV_ENV_WORK_DIR} -w ${DEV_ENV_WORK_DIR}
+DEV_ENV_CMD := ${DEV_ENV_PREFIX} ${DEV_ENV_IMAGE}
 
 # Legacy support for DEV_REGISTRY, plus new support for DEIS_REGISTRY.
 DEV_REGISTRY ?= $(eval docker-machine ip deis):5000
@@ -17,13 +26,29 @@ DEIS_REGISTY ?= ${DEV_REGISTRY}/
 IMAGE_PREFIX ?= deis
 
 # Kubernetes-specific information for RC, Service, and Image.
-BOOTSTRAP := manifests/${SHORT_NAME}-bootstrap-pod.yaml
-RC := manifests/${SHORT_NAME}-rc.yaml
-SVC := manifests/${SHORT_NAME}-service.yaml
-DISCO_SVC := manifests/${SHORT_NAME}-discovery-service.yaml
+BOOTSTRAP := manifests/deis-${SHORT_NAME}-bootstrap-pod.yaml
+RC := manifests/deis-${SHORT_NAME}-rc.yaml
+SVC := manifests/deis-${SHORT_NAME}-service.yaml
+DISCO_SVC := manifests/deis-${SHORT_NAME}-discovery-service.yaml
+CLUSTER_SVC := manifests/deis-${SHORT_NAME}-cluster-service.yaml
+
 IMAGE := ${DEIS_REGISTRY}${IMAGE_PREFIX}/${SHORT_NAME}:${VERSION}
 
-all: docker-build docker-push
+TEST_PACKAGES := $(shell ${DEV_ENV_CMD} glide nv)
+
+all: build docker-build docker-push
+
+bootstrap:
+		${DEV_ENV_CMD} glide install
+
+glideup:
+		${DEV_ENV_CMD} glide up
+
+build:
+	${DEV_ENV_PREFIX} -e CGO_ENABLED=0 ${DEV_ENV_IMAGE} go build -a -installsuffix cgo -ldflags ${LDFLAGS} -o ${BINARY_DEST_DIR}/boot boot.go
+
+test:
+	${DEV_ENV_CMD} go test -race ${TEST_PACKAGES}
 
 # For cases where we're building from local
 # We also alter the RC file to set the image name.
@@ -44,6 +69,7 @@ deploy: kube-service kube-rc
 kube-service:
 	kubectl create -f ${SVC}
 	kubectl create -f ${DISCO_SVC}
+	kubectl create -f ${CLUSTER_SVC}
 
 # When possible, we deploy with RCs.
 kube-rc:
@@ -55,5 +81,6 @@ kube-clean:
 	kubectl delete -f ${RC}
 	kubectl delete -f ${SVC}
 	kubectl delete -f ${DISCO_SVC}
+	kubectl delete -f ${CLUSTER_SVC}
 
 .PHONY: all build docker-compile kube-up kube-down deploy

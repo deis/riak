@@ -3,10 +3,6 @@ sudo: required
 services:
   - docker
 
-before_install:
-  - docker build -t deis/riak rootfs
-  - docker run -d -e RIAK_MASTER=1 --name riak-master deis/riak
-  - sleep 5
-
 script:
-  - docker exec riak-master riak ping
+  - make bootstrap
+  - make test
