@@ -10,3 +10,7 @@ ADD http://s3.amazonaws.com/downloads.basho.com/riak-cs/${SHORT_VSN}/${LONG_VSN}
 RUN dpkg -i $TARGET_DEB
 
 RUN rm ${TARGET_DEB}
+
+ADD ./config.sh /config.sh
+
+CMD /config.sh
