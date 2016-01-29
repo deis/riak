@@ -4,8 +4,10 @@ ENV SHORT_VSN 2.0
 ENV LONG_VSN 2.0.0
 ENV TARGET_DEB stanchion.deb
 
+WORKDIR /
+
 ADD http://s3.amazonaws.com/downloads.basho.com/stanchion/${SHORT_VSN}/${LONG_VSN}/ubuntu/trusty/stanchion_${LONG_VSN}-1_amd64.deb \
   ${TARGET_DEB}
-RUN (cd / && dpkg -i "${TARGET_DEB}")
+RUN dpkg -i ${TARGET_DEB}
 
-RUN rm /${TARGET_DEB}
+RUN rm ${TARGET_DEB}
