@@ -15,8 +15,6 @@ IMAGE_PREFIX ?= deis
 
 IMAGE := ${DEIS_REGISTRY}${IMAGE_PREFIX}/${SHORT_NAME}:${VERSION}
 
-TEST_PACKAGES := $(shell ${DEV_ENV_CMD} glide nv)
-
 all: build docker-build docker-push
 
 # For cases where we're building from local

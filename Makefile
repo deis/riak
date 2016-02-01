@@ -5,6 +5,7 @@ VERSION ?= git-$(shell git rev-parse --short HEAD)
 # build information
 BINARY_DEST_DIR := ${CURDIR}/rootfs/bin
 LDFLAGS := "-s -X main.version=${VERSION}"
+TEST_PACKAGES := $(shell ${DEV_ENV_CMD} glide nv)
 
 # Dockerized development environment variables
 REPO_PATH := github.com/deis/${SHORT_NAME}
