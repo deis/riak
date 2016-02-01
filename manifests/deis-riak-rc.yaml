@@ -31,3 +31,13 @@ spec:
             - containerPort: 8087
             - containerPort: 8098
             - containerPort: 8099
+        - name: riak-cs
+          image: quay.io/deisci/riak-cs:v2-beta
+          imagePullPolicy: Always
+          env:
+            - name: LISTEN_HOST
+              value: "0.0.0.0"
+            - name: LISTEN_PORT
+              value: "8081"
+          ports:
+            - containerPort: 8081
