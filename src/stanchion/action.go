@@ -49,7 +49,7 @@ func Action(ctx *cli.Context) {
 	}
 
 	log.Printf("Starting Riak Stanchion...")
-	startCmd := exec.Command("stanchion", "start")
+	startCmd := exec.Command("stanchion", "console")
 	startCmd.Stdout = os.Stdout
 	startCmd.Stderr = os.Stderr
 	if err := startCmd.Run(); err != nil {
