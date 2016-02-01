@@ -11,6 +11,8 @@ const (
 type config struct {
 	ListenHost          string `envconfig:"LISTEN_HOST" required:"true"`
 	ListenPort          int    `envconfig:"LISTEN_PORT" required:"true"`
+	RiakHost            string `envconfig:"RIAK_HOST" default:"localhost"`
+	RiakProtobufPort    int    `envconfig:"RIAK_PROTOBUF_PORT" default:"8098"`
 	StanchionHost       string `envconfig:"DEIS_RIAK_STANCHION_SERVICE_HOST" required:"true"`
 	StanchionPort       int    `envconfig:"DEIS_RIAK_STANCHION_SERVICE_PORT" required:"true"`
 	AdminKeyLocation    string `envconfig:"ADMIN_KEY_LOCATION" default:"/var/run/secrets/deis/riak-cs/admin/access-key-id"`
