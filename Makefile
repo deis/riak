@@ -23,6 +23,7 @@ DISCO_SVC := ${MANIFESTS_DIR}/deis-riak-discovery-service.yaml
 CLUSTER_SVC := ${MANIFESTS_DIR}/deis-riak-cluster-service.yaml
 CS_SVC := ${MANIFESTS_DIR}/deis-riak-cs-service.yaml
 STANCHION_SVC := ${MANIFESTS_DIR}/deis-riak-stanchion-service.yaml
+ADMIN_USER_SEC := ${MANIFESTS_DIR}/deis-riak-cs-admin-user-secret.yaml
 
 all: build riak-docker-build riak-cs-docker-build riak-stanchion-docker-build riak-docker-push riak-cs-docker-push riak-stanchion-docker-push
 
@@ -67,7 +68,10 @@ riak-stanchion-docker-push:
 	make -C rootfs/riak-stanchion docker-push
 
 # Deploy is a Kubernetes-oriented target
-kube-deploy: kube-service kube-rc
+kube-deploy: kube-secrets kube-service kube-rc
+
+kube-secrets:
+	kubectl create -f ${ADMIN_USER_SEC}
 
 kube-service:
 	kubectl create -f ${SVC}
@@ -87,3 +91,4 @@ kube-clean:
 	kubectl delete -f ${CLUSTER_SVC}
 	kubectl delete -f ${CS_SVC}
 	kubectl delete -f ${STANCHION_SVC}
+	kubectl delete -f ${ADMIN_USER_SEC}
