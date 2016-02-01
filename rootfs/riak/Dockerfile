@@ -25,4 +25,4 @@ COPY . /
 # Open ports for HTTP and Protocol Buffers
 EXPOSE 8087 8098
 
-CMD ["/bin/boot"]
+CMD ["/bin/boot", "riak"]

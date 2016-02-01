@@ -13,4 +13,4 @@ RUN rm ${TARGET_DEB}
 
 COPY . /
 
-CMD /config.sh
+CMD ["/bin/boot", "riak-cs"]
