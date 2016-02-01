@@ -1,3 +1,5 @@
 rootfs/riak/bin/boot
+rootfs/riak-cs/bin
+rootfs/riak-stanchion/bin
 rootfs/bin
 vendor
