@@ -1,11 +1,12 @@
 hash: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-updated: 2016-01-28T19:08:41.286415146Z
+updated: 2016-02-01T19:22:16.659562541Z
 imports:
 - name: github.com/arschles/assert
   version: 6882f85ccdc7c1822b146d1a6b0c2c48f91b5140
+- name: github.com/codegangsta/cli
+  version: cf1f63a7274872768d4037305d572b70b1199397
 - name: github.com/gorilla/context
   version: 1c83b3eabd45b6d76072b66b746c20815fb2872d
-  repo: https://github.com/gorilla/context
 - name: github.com/gorilla/mux
   version: 26a6070f849969ba72b72256e9f14cf519751690
 - name: github.com/kelseyhightower/envconfig
