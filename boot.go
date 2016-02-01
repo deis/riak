@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/deis/riak/chans"
-	"github.com/deis/riak/clustersrv"
-	"github.com/deis/riak/config"
-	"github.com/deis/riak/riak"
+	"github.com/deis/riak/src/chans"
+	"github.com/deis/riak/src/clustersrv"
+	"github.com/deis/riak/src/riak"
+	"github.com/deis/riak/src/riak/config"
 )
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 		log.Printf("Starting as a non-bootstrap node")
 		go func() {
 			httpClient := &http.Client{}
-			clusterServerURL := clustersrv.URLFromConfig(conf)
+			clusterServerURL := clustersrv.URLFromConfig(conf.ClusterServerHost, conf.ClusterServerPort)
 			if err != nil {
 				cmdDoneCh <- err
 				return

@@ -7,7 +7,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/deis/riak/clustersrv"
+	"github.com/deis/riak/src/clustersrv"
 )
 
 type ErrAcquireLock struct {
