@@ -32,9 +32,13 @@ glideup:
 
 build:
 	${DEV_ENV_PREFIX} -e CGO_ENABLED=0 ${DEV_ENV_IMAGE} go build -a -installsuffix cgo -ldflags ${LDFLAGS} -o ${BINARY_DEST_DIR}/boot boot.go
-	cp ${BINARY_DEST_DIR}/boot rootfs/riak/bin
-	cp ${BINARY_DEST_DIR}/boot rootfs/riak-cs/bin
-	cp ${BINARY_DEST_DIR}/boot rootfs/riak-stanchion/bin
+	# copy the built binary into each Docker filesystem, so the each Dockerfile can ADD it into the respective images
+	mkdir -p rootfs/riak/bin
+	mkdir -p rootfs/riak-cs/bin
+	mkdir -p rootfs/riak-stanchion/bin
+	cp ${BINARY_DEST_DIR}/boot rootfs/riak/bin/boot
+	cp ${BINARY_DEST_DIR}/boot rootfs/riak-cs/bin/boot
+	cp ${BINARY_DEST_DIR}/boot rootfs/riak-stanchion/bin/boot
 
 test:
 	${DEV_ENV_CMD} go test -race ${TEST_PACKAGES}
