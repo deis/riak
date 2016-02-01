@@ -8,11 +8,10 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/deis/riak/src/chans"
 	"github.com/deis/riak/src/clustersrv"
-	"github.com/deis/riak/src/riak/config"
 )
 
 func Action(ctx *cli.Context) {
-	conf, err := config.Get()
+	conf, err := getConfig()
 	if err != nil {
 		log.Printf("Error getting config (%s)", err)
 		os.Exit(1)
