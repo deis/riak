@@ -30,6 +30,9 @@ glideup:
 
 build:
 	${DEV_ENV_PREFIX} -e CGO_ENABLED=0 ${DEV_ENV_IMAGE} go build -a -installsuffix cgo -ldflags ${LDFLAGS} -o ${BINARY_DEST_DIR}/boot boot.go
+	cp ${BINARY_DEST_DIR}/boot rootfs/riak/bin
+	cp ${BINARY_DEST_DIR}/boot rootfs/riak-cs/bin
+	cp ${BINARY_DEST_DIR}/boot rootfs/riak-stanchion/bin
 
 test:
 	${DEV_ENV_CMD} go test -race ${TEST_PACKAGES}
