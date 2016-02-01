@@ -1,4 +1,4 @@
-SHORT_NAME := riakcs-stanchion
+SHORT_NAME := riak-stanchion
 
 DEV_REGISTRY ?= $(eval docker-machine ip deis):5000
 DEIS_REGISTY ?= ${DEV_REGISTRY}/
