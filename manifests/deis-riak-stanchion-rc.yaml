@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: deis-riak-stanchion
+  namespace: deis
+  labels:
+    heritage: deis
+spec:
+  replicas: 1
+  selector:
+    name: riak-stanchion
+  template:
+    metadata:
+      labels:
+        name: riak-stanchion
+    spec:
+      containers:
+        - name: riak-stanchion
+          image: quay.io/deisci/riak-stanchion:v2-beta
+          imagePullPolicy: Always
+          env:
+            - name:  LISTEN_HOST
+              value: "0.0.0.0"
+            - name:  LISTEN_PORT
+              value: "8092"
+          ports:
+            - containerPort: 8092
+          volumeMounts:
+            - name: riak-cs-admin-user
+              mountPath: /var/run/secrets/deis/riak-cs/admin
+              readOnly: true
+      volumes:
+        - name: riak-cs-admin-user
+          secret:
+            secretName: riak-cs-admin-user
