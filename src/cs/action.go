@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
 
 	"github.com/codegangsta/cli"
 	"github.com/deis/riak/src/replace"
@@ -52,5 +53,16 @@ func Action(ctx *cli.Context) {
 		log.Printf("Error: writing new config file to %s (%s)", confFilePath, err)
 		os.Exit(1)
 	}
+
+	log.Printf("Starting Riak CS...")
+	startCmd := exec.Command("riak-cs", "start")
+	startCmd.Stdout = os.Stdout
+	startCmd.Stderr = os.Stderr
+	if err := startCmd.Run(); err != nil {
+		log.Printf("Error: starting Riak CS (%s)", err)
+		os.Exit(1)
+	}
+	log.Printf("started")
+	select {}
 
 }
