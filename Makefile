@@ -59,7 +59,7 @@ riak-stanchion-docker-push:
 	make -C rootfs/riak-stanchion docker-push
 
 # Deploy is a Kubernetes-oriented target
-deploy: kube-service kube-rc
+kube-deploy: kube-service kube-rc
 
 kube-service:
 	kubectl create -f ${SVC}
