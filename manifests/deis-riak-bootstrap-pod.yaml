@@ -38,3 +38,11 @@ spec:
           value: "8081"
       ports:
         - containerPort: 8081
+      volumeMounts:
+        - name: riak-cs-admin-user
+          mountPath: /var/run/secrets/deis/riak-stanchion/admin-user
+          readOnly: true
+  volumes:
+    - name: riak-cs-admin-user
+      secret:
+        secretName: riak-cs-admin-user
