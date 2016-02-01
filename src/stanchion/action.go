@@ -52,10 +52,14 @@ func Action(ctx *cli.Context) {
 	startCmd := exec.Command("stanchion", "console")
 	startCmd.Stdout = os.Stdout
 	startCmd.Stderr = os.Stderr
-	if err := startCmd.Run(); err != nil {
+	if err := startCmd.Start(); err != nil {
 		log.Printf("Error: starting Riak Stanchion (%s)", err)
 		os.Exit(1)
 	}
-	log.Printf("started")
-	select {}
+	if err := startCmd.Wait(); err != nil {
+		log.Printf("Error: running Riak Stanchion (%s)", err)
+		os.Exit(1)
+	}
+	log.Printf("Error: Riak Stanchion exited without error, should run forever")
+	os.Exit(1)
 }
