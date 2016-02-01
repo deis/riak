@@ -65,4 +65,6 @@ func Action(ctx *cli.Context) {
 	if err := startCmd.Wait(); err != nil {
 		log.Printf("Error: running Riak CS (%s)", err)
 	}
+	log.Printf("Error: Riak CS exited without error, should run forever")
+	os.Exit(1)
 }
