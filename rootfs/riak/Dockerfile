@@ -20,7 +20,7 @@ RUN sed -i.bak 's/listener.http.internal = 127.0.0.1/listener.http.internal = 0.
     echo "javascript.reduce_pool_size = 0" >> /etc/riak/riak.conf && \
     echo "javascript.hook_pool_size = 0" >> /etc/riak/riak.conf
 
-COPY . /
+ADD bin /bin
 
 # Open ports for HTTP and Protocol Buffers
 EXPOSE 8087 8098

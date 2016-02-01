@@ -11,6 +11,6 @@ RUN dpkg -i $TARGET_DEB
 
 RUN rm ${TARGET_DEB}
 
-COPY . /
+ADD bin /bin
 
 CMD ["/bin/boot", "riak-cs"]
