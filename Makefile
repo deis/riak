@@ -3,7 +3,7 @@ SHORT_NAME := riak
 VERSION ?= git-$(shell git rev-parse --short HEAD)
 
 # build information
-BINARY_DEST_DIR := ${CURDIR}/rootfs/bin
+BINARY_DEST_DIR := rootfs/bin
 LDFLAGS := "-s -X main.version=${VERSION}"
 TEST_PACKAGES := $(shell ${DEV_ENV_CMD} glide nv)
 
