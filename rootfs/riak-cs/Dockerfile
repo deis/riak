@@ -11,6 +11,6 @@ RUN dpkg -i $TARGET_DEB
 
 RUN rm ${TARGET_DEB}
 
-ADD ./config.sh /config.sh
+COPY . /
 
 CMD /config.sh
