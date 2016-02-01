@@ -22,6 +22,8 @@ SVC := ${MANIFESTS_DIR}/deis-riak-service.yaml
 DISCO_SVC := ${MANIFESTS_DIR}/deis-riak-discovery-service.yaml
 CLUSTER_SVC := ${MANIFESTS_DIR}/deis-riak-cluster-service.yaml
 
+all: build riak-docker-build riak-cs-docker-build riak-stanchion-docker-build riak-docker-push riak-cs-docker-push riak-stanchion-docker-push
+
 bootstrap:
 		${DEV_ENV_CMD} glide install
 
