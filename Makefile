@@ -21,6 +21,8 @@ RC := ${MANIFESTS_DIR}/deis-riak-rc.yaml
 SVC := ${MANIFESTS_DIR}/deis-riak-service.yaml
 DISCO_SVC := ${MANIFESTS_DIR}/deis-riak-discovery-service.yaml
 CLUSTER_SVC := ${MANIFESTS_DIR}/deis-riak-cluster-service.yaml
+CS_SVC := ${MANIFESTS_DIR}/deis-riak-cs-service.yaml
+STANCHION_SVC := ${MANIFESTS_DIR}/deis-riak-stanchion-service.yaml
 
 all: build riak-docker-build riak-cs-docker-build riak-stanchion-docker-build riak-docker-push riak-cs-docker-push riak-stanchion-docker-push
 
@@ -71,6 +73,8 @@ kube-service:
 	kubectl create -f ${SVC}
 	kubectl create -f ${DISCO_SVC}
 	kubectl create -f ${CLUSTER_SVC}
+	kubectl create -f ${CS_SVC}
+	kubectl create -f ${STANCHION_SVC}
 
 kube-rc:
 	kubectl create -f ${BOOTSTRAP}
@@ -81,3 +85,5 @@ kube-clean:
 	kubectl delete -f ${SVC}
 	kubectl delete -f ${DISCO_SVC}
 	kubectl delete -f ${CLUSTER_SVC}
+	kubectl delete -f ${CS_SVC}
+	kubectl delete -f ${STANCHION_SVC}

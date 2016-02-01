@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: deis-riak-stanchion
+  namespace: deis
+  labels:
+    heritage: deis
+spec:
+  ports:
+    - port: 8093
+      targetPort: 8093
+      name: http
+      protocol: TCP
+  selector:
+    name: riak-stanchion
