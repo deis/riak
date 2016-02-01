@@ -11,7 +11,6 @@ const (
 type config struct {
 	ListenHost          string `envconfig:"LISTEN_HOST" required:"true"`
 	ListenPort          int    `envconfig:"LISTEN_PORT" required:"true"`
-	StanchionURL        string `envconfig:"STANCHION_URL" required:"true"`
 	AdminKeyLocation    string `envconfig:"ADMIN_KEY_LOCATION" default:"/var/run/secrets/deis/riak-stanchion/admin/access-key-id"`
 	AdminSecretLocation string `envconfig:"ADMIN_SECRET_LOCATION" default:"/var/run/secrets/deis/riak-stanchion/admin/access-secret-key"`
 }
