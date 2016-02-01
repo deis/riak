@@ -13,8 +13,8 @@ type config struct {
 	ListenPort          int    `envconfig:"LISTEN_PORT" required:"true"`
 	StanchionHost       string `envconfig:"DEIS_RIAK_STANCHION_SERVICE_HOST" required:"true"`
 	StanchionPort       int    `envconfig:"DEIS_RIAK_STANCHION_SERVICE_PORT" required:"true"`
-	AdminKeyLocation    string `envconfig:"ADMIN_KEY_LOCATION" default:"/var/run/secrets/deis/riak-cs/admin-user"`
-	AdminSecretLocation string `envconfig:"ADMIN_SECRET_LOCATION" default:"/var/run/secrets/deis/riak-cs/admin-secret"`
+	AdminKeyLocation    string `envconfig:"ADMIN_KEY_LOCATION" default:"/var/run/secrets/deis/riak-cs/admin/access-key-id"`
+	AdminSecretLocation string `envconfig:"ADMIN_SECRET_LOCATION" default:"/var/run/secrets/deis/riak-cs/admin/access-key-secret"`
 }
 
 func getConfig() (*config, error) {

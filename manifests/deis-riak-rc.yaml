@@ -43,7 +43,7 @@ spec:
             - containerPort: 8081
           volumeMounts:
             - name: riak-cs-admin-user
-              mountPath: /var/run/secrets/deis/riak-cs/admin-user
+              mountPath: /var/run/secrets/deis/riak-cs/admin
               readOnly: true
       volumes:
         - name: riak-cs-admin-user
