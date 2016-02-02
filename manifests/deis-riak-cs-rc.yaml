@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ReplicationController
 metadata:
-  name: deis-riak
+  name: deis-riak-cs
   namespace: deis
   labels:
     heritage: deis
