@@ -48,15 +48,6 @@ func Action(ctx *cli.Context) {
 		os.Exit(1)
 	}
 
-	log.Printf("Increasing ulimit")
-	ulCmd := exec.Command("ulimit", "-n", "4096")
-	ulCmd.Stdout = os.Stdout
-	ulCmd.Stderr = os.Stderr
-	if err := ulCmd.Run(); err != nil {
-		log.Printf("Error: increasing ulimit (%s)", err)
-		os.Exit(1)
-	}
-
 	log.Printf("Starting Riak Stanchion...")
 	startCmd := exec.Command("stanchion", "console")
 	startCmd.Stdout = os.Stdout
