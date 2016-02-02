@@ -23,8 +23,7 @@ if env | grep -q "RIAK_INET_DIST_MIN"; then
 fi
 
 #configuration for Riak CS
-sed -i.bak "s/storage_backend = bitcask//" $CONF_FILE
-echo "buckets.default.allow_mult = true" >> $CONF_FILE
+sed -i.bak "s/storage_backend = bitcask/d/" $CONF_FILE
 echo "buckets.default.allow_mult = true" >> $CONF_FILE
 touch $ADVANCED_CONF_FILE
 cat << EOF > $ADVANCED_CONF_FILE
