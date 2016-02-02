@@ -1,18 +1,8 @@
 FROM ubuntu:14.04
 
-ENV SHORT_VSN 2.0
-ENV LONG_VSN 2.0.0
-ENV TARGET_DEB stanchion.deb
-
-WORKDIR /
-
-ADD http://s3.amazonaws.com/downloads.basho.com/stanchion/${SHORT_VSN}/${LONG_VSN}/ubuntu/trusty/stanchion_${LONG_VSN}-1_amd64.deb \
-  ${TARGET_DEB}
-RUN dpkg -i ${TARGET_DEB}
-
 ENV NUM_PORTS 4096
-RUN rm ${TARGET_DEB} && ulimit -n ${NUM_PORTS}
-
+ENV TARGET_DEB stanchion.deb
+ADD http://s3.amazonaws.com/downloads.basho.com/stanchion/2.0/2.0.0/ubuntu/trusty/stanchion_2.0.0-1_amd64.deb ${TARGET_DEB}
+RUN dpkg -i ${TARGET_DEB} && rm ${TARGET_DEB} && ulimit -n ${NUM_PORTS}
 ADD bin /bin
-
 CMD ["/bin/boot", "riak-stanchion"]
