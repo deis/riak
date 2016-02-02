@@ -18,6 +18,7 @@ DEV_ENV_CMD := ${DEV_ENV_PREFIX} ${DEV_ENV_IMAGE}
 MANIFESTS_DIR := ${CURDIR}/manifests
 BOOTSTRAP := ${MANIFESTS_DIR}/deis-riak-bootstrap-pod.yaml
 RC := ${MANIFESTS_DIR}/deis-riak-rc.yaml
+CS_RC := ${MANIFESTS_DIR}/deis-riak-cs-rc.yaml
 STANCHION_RC := ${MANIFESTS_DIR}/deis-riak-stanchion-rc.yaml
 SVC := ${MANIFESTS_DIR}/deis-riak-service.yaml
 DISCO_SVC := ${MANIFESTS_DIR}/deis-riak-discovery-service.yaml
@@ -85,10 +86,12 @@ kube-rc:
 	kubectl create -f ${BOOTSTRAP}
 	kubectl create -f ${RC}
 	kubectl create -f ${STANCHION_RC}
+	kubectl create -f ${CS_RC}
 
 kube-clean:
 	kubectl delete -f ${RC}
 	kubectl delete -f ${STANCHION_RC}
+	kubectl delete -f ${CS_RC}
 	kubectl delete -f ${SVC}
 	kubectl delete -f ${DISCO_SVC}
 	kubectl delete -f ${CLUSTER_SVC}
