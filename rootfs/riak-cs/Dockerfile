@@ -8,8 +8,8 @@ WORKDIR /
 ADD http://s3.amazonaws.com/downloads.basho.com/riak-cs/${SHORT_VSN}/${LONG_VSN}/ubuntu/trusty/riak-cs_${LONG_VSN}-1_amd64.deb \
   ${TARGET_DEB}
 RUN dpkg -i $TARGET_DEB
-
-RUN rm ${TARGET_DEB} && ulimit -n 65536
+ENV NUM_PORTS 4096
+RUN rm ${TARGET_DEB} && ulimit -n ${NUM_PORTS}
 
 ADD bin /bin
 

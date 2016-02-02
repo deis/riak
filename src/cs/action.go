@@ -46,6 +46,7 @@ func Action(ctx *cli.Context) {
 	}
 
 	replacements := []replace.Replacement{
+		replace.FmtReplacement("erlang.max_ports = 65536", "erlang.max_ports = %s", conf.NumPorts),
 		replace.FmtReplacement("riak_host = 127.0.0.1:8087", "riak_host = %s:%d", conf.RiakHost, conf.RiakProtobufPort),
 		replace.FmtReplacement("listener = 127.0.0.1:8080", "listener = %s:%d", conf.ListenHost, conf.ListenPort),
 		replace.FmtReplacement("stanchion_host = 127.0.0.1:8085", "stanchion_host = %s:%d", conf.StanchionHost, conf.StanchionPort),

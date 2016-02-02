@@ -9,6 +9,7 @@ const (
 )
 
 type config struct {
+	NumPorts            int    `envconfig:"NUM_PORTS" required:"true"`
 	ListenHost          string `envconfig:"LISTEN_HOST" required:"true"`
 	ListenPort          int    `envconfig:"LISTEN_PORT" required:"true"`
 	RiakHost            string `envconfig:"RIAK_HOST" default:"localhost"`
