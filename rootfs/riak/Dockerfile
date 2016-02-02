@@ -18,7 +18,8 @@ RUN sed -i.bak 's/listener.http.internal = 127.0.0.1/listener.http.internal = 0.
     echo "anti_entropy.concurrency_limit = 1" >> /etc/riak/riak.conf && \
     echo "javascript.map_pool_size = 0" >> /etc/riak/riak.conf && \
     echo "javascript.reduce_pool_size = 0" >> /etc/riak/riak.conf && \
-    echo "javascript.hook_pool_size = 0" >> /etc/riak/riak.conf
+    echo "javascript.hook_pool_size = 0" >> /etc/riak/riak.conf && \
+    ulimit -n 65536
 
 ADD bin /bin
 
