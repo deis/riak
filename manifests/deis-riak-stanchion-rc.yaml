@@ -27,7 +27,7 @@ spec:
             - containerPort: 8092
           volumeMounts:
             - name: riak-cs-admin-user
-              mountPath: /var/run/secrets/deis/riak-cs/admin
+              mountPath: /var/run/secrets/deis/riak-stanchion/admin
               readOnly: true
       volumes:
         - name: riak-cs-admin-user
