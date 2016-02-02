@@ -20,6 +20,7 @@ func Action(ctx *cli.Context) {
 		log.Printf("Error: getting local hostname (%s)", err)
 		os.Exit(1)
 	}
+	log.Printf("hostname %s", localHostName)
 
 	conf, err := getConfig()
 	if err != nil {
