@@ -15,7 +15,7 @@ spec:
         name: riak-cs
     spec:
       containers:
-        - name: riak-cs
+        - name: deis-riak-cs
           image: quay.io/deisci/riak-cs:v2-beta
           imagePullPolicy: Always
           env:

@@ -9,7 +9,7 @@ metadata:
     heritage: deis
 spec:
   containers:
-    - name: riak
+    - name: deis-riak
       image: quay.io/deisci/riak:v2-beta
       imagePullPolicy: Always
       env:
