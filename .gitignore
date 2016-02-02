@@ -3,3 +3,4 @@ rootfs/riak-cs/bin/boot
 rootfs/riak-stanchion/bin/boot
 rootfs/bin
 vendor
+local-test/
