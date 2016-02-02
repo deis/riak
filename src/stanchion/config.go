@@ -10,6 +10,8 @@ const (
 
 type config struct {
 	NumPorts            int    `envconfig:"NUM_PORTS" required:"true"`
+	RiakHost            string `envconfig:"DEIS_RIAK_SERVICE_HOST" required:"true"`
+	RiakPort            int    `envconfig:"DEIS_RIAK_SERVICE_PORT" required:"true"`
 	ListenHost          string `envconfig:"LISTEN_HOST" required:"true"`
 	ListenPort          int    `envconfig:"LISTEN_PORT" required:"true"`
 	AdminKeyLocation    string `envconfig:"ADMIN_KEY_LOCATION" default:"/var/run/secrets/deis/riak-stanchion/admin/access-key-id"`

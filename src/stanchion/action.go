@@ -42,6 +42,7 @@ func Action(ctx *cli.Context) {
 		replace.FmtReplacement("admin.key = admin-key", "admin.key = %s", string(adminKey)),
 		replace.FmtReplacement("admin.secret = admin-secret", "admin.secret = %s", string(adminSecret)),
 		replace.FmtReplacement("erlang.max_ports = 65536", "erlang.max_ports = %d", conf.NumPorts),
+		replace.FmtReplacement("riak_host = 127.0.0.1:8087", "riak_host = %s:%d", conf.RiakHost, conf.RiakPort),
 	}
 	newConfFile := replace.String(string(confFile), replacements...)
 	if err := ioutil.WriteFile(confFilePath, []byte(newConfFile), os.ModePerm); err != nil {
