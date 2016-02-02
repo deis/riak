@@ -9,7 +9,7 @@ ADD http://s3.amazonaws.com/downloads.basho.com/riak-cs/${SHORT_VSN}/${LONG_VSN}
   ${TARGET_DEB}
 RUN dpkg -i $TARGET_DEB
 
-RUN rm ${TARGET_DEB}
+RUN rm ${TARGET_DEB} && ulimit -n 65536
 
 ADD bin /bin
 
