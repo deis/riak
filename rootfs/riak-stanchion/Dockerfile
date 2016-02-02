@@ -10,7 +10,8 @@ ADD http://s3.amazonaws.com/downloads.basho.com/stanchion/${SHORT_VSN}/${LONG_VS
   ${TARGET_DEB}
 RUN dpkg -i ${TARGET_DEB}
 
-RUN rm ${TARGET_DEB} && ulimit -n 65536
+ENV NUM_PORTS 4096
+RUN rm ${TARGET_DEB} && ulimit -n ${NUM_PORTS}
 
 ADD bin /bin
 
