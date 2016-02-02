@@ -8,11 +8,11 @@ metadata:
 spec:
   replicas: 3
   selector:
-    name: riak
+    name: riak-cs
   template:
     metadata:
       labels:
-        name: riak
+        name: riak-cs
     spec:
       containers:
         - name: riak-cs
