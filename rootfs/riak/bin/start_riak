@@ -1,7 +1,5 @@
 #!/bin/sh
 
-RIAK_BACKEND=${RIAK_BACKEND:-bitcask}
-
 IP_ADDRESS=$(ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
 
 # Ensure correct ownership and permissions on volumes
