@@ -17,7 +17,7 @@ RUN \
 
 ENV NUM_PORTS 65536
 # Tune Riak configuration settings for the container
-RUN sed -i.bak "s/storage_backend = \(.*\)/d/" ${CONF_FILE} && \
+RUN sed -i.bak "s/storage_backend = \(.*\)//" ${CONF_FILE} && \
     echo "buckets.default.allow_mult = true" >> $CONF_FILE && \
     sed -i.bak 's/listener.http.internal = 127.0.0.1/listener.http.internal = 0.0.0.0/' ${CONF_FILE} && \
     sed -i.bak 's/listener.protobuf.internal = 127.0.0.1/listener.protobuf.internal = 0.0.0.0/' ${CONF_FILE} && \
