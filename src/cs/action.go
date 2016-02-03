@@ -62,7 +62,7 @@ func Action(ctx *cli.Context) {
 	}
 
 	log.Printf("Starting Riak CS...")
-	startCmd := exec.Command("riak-cs", "console")
+	startCmd := exec.Command("start_riak_cs")
 	startCmd.Stdout = os.Stdout
 	startCmd.Stderr = os.Stderr
 	if err := startCmd.Start(); err != nil {
