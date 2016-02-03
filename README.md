@@ -70,9 +70,10 @@ To commit those changes.
 
 Below are links to helpful Basho documents related to Riak, Riak CS and Stanchion.
 
-- [Configuring Riak](http://docs.basho.com/riakcs/latest/cookbooks/configuration/Configuring-Riak/)
-- [Configuring Riak CS](http://docs.basho.com/riakcs/latest/cookbooks/configuration/Configuring-Riak-CS/)
-- [Configuring Stanchion](http://docs.basho.com/riakcs/latest/cookbooks/configuration/Configuring-Stanchion/)
+- [Configuring Riak](http://docs.basho.com/riakcs/latest/cookbooks/configuration/Configuring-Riak/) - Official Basho Docs
+- [Configuring Riak CS](http://docs.basho.com/riakcs/latest/cookbooks/configuration/Configuring-Riak-CS/) - Official Basho Docs
+- [Configuring Stanchion](http://docs.basho.com/riakcs/latest/cookbooks/configuration/Configuring-Stanchion/) - Official Basho Docs
+- [Run Riak CS in Docker](https://github.com/hectcastro/docker-riak-cs) - Code for launching a local Riak CS cluster in Docker containers
 
 ## RootFS
 
