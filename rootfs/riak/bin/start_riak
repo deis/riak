@@ -17,6 +17,8 @@ fi
 echo "config file:"
 cat $CONF_FILE
 
+ulimit -n ${NUM_PORTS}
+
 echo "Starting Riak..."
 # Start Riak
 "$(ls -d /usr/lib/riak/erts*)/bin/run_erl" "/tmp/riak" "/var/log/riak" "exec /usr/sbin/riak console" &
