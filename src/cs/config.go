@@ -9,6 +9,7 @@ const (
 )
 
 type config struct {
+	ConfFilePath        string `envconfig:"CONF_FILE" required:"true"`
 	NumPorts            int    `envconfig:"NUM_PORTS" required:"true"`
 	ListenHost          string `envconfig:"LISTEN_HOST" required:"true"`
 	ListenPort          int    `envconfig:"LISTEN_PORT" required:"true"`

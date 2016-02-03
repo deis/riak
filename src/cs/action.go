@@ -10,10 +10,6 @@ import (
 	"github.com/deis/riak/src/replace"
 )
 
-const (
-	confFilePath = "/etc/riak-cs/riak-cs.conf"
-)
-
 func Action(ctx *cli.Context) {
 	localHostName, err := os.Hostname()
 	if err != nil {
@@ -40,9 +36,9 @@ func Action(ctx *cli.Context) {
 		os.Exit(1)
 	}
 
-	confFile, err := ioutil.ReadFile(confFilePath)
+	confFile, err := ioutil.ReadFile(conf.ConfFilePath)
 	if err != nil {
-		log.Printf("Error: reading Riak CS config file from %s (%s)", confFilePath, err)
+		log.Printf("Error: reading Riak CS config file from %s (%s)", conf.ConfFilePath, err)
 		os.Exit(1)
 	}
 
@@ -56,8 +52,8 @@ func Action(ctx *cli.Context) {
 		replace.FmtReplacement("nodename = riak_cs@127.0.0.1", "nodename = riak_cs@%s", localHostName),
 	}
 	newConfFile := replace.String(string(confFile), replacements...)
-	if err := ioutil.WriteFile(confFilePath, []byte(newConfFile), os.ModePerm); err != nil {
-		log.Printf("Error: writing new config file to %s (%s)", confFilePath, err)
+	if err := ioutil.WriteFile(conf.ConfFilePath, []byte(newConfFile), os.ModePerm); err != nil {
+		log.Printf("Error: writing new config file to %s (%s)", conf.ConfFilePath, err)
 		os.Exit(1)
 	}
 
