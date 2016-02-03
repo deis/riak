@@ -16,6 +16,9 @@ if env | grep -q "RIAK_INET_DIST_MIN"; then
   echo "erlang.distribution.port_range.maximum = ${RIAK_INET_DIST_MAX}" >> $CONF_FILE
 fi
 
+echo "config file:"
+cat $CONF_FILE
+
 echo "Starting Riak..."
 # Start Riak
 "$(ls -d /usr/lib/riak/erts*)/bin/run_erl" "/tmp/riak" "/var/log/riak" "exec /usr/sbin/riak console" &
