@@ -51,7 +51,6 @@ func Action(ctx *cli.Context) {
 		replace.FmtReplacement("riak_host = 127.0.0.1:8087", "riak_host = %s:%d", conf.RiakHost, conf.RiakProtobufPort),
 		replace.FmtReplacement("listener = 127.0.0.1:8080", "listener = %s:%d", conf.ListenHost, conf.ListenPort),
 		replace.FmtReplacement("stanchion_host = 127.0.0.1:8085", "stanchion_host = %s:%d", conf.StanchionHost, conf.StanchionPort),
-		replace.FmtReplacement("stanchion_ssl = on", "stanchion_ssl = off"),
 		replace.FmtReplacement("admin.key = admin-key", "admin.key = %s", adminKey),
 		replace.FmtReplacement("admin.secret = admin-secret", "admin.secret = %s", adminSecret),
 		replace.FmtReplacement("nodename = riak_cs@127.0.0.1", "nodename = riak_cs@%s", localHostName),
