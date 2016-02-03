@@ -1,7 +1,7 @@
 FROM ubuntu:14.04
 
-ENV TMP_DIR /tmp/riak-stanchion
-ENV LOG_DIR /var/log/riak-stanchion
+ENV TMP_DIR /tmp/stanchion
+ENV LOG_DIR /var/log/stanchion
 ENV NUM_PORTS 4096
 ENV TARGET_DEB stanchion.deb
 ENV CONF_FILE /etc/stanchion/stanchion.conf
