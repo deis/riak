@@ -52,7 +52,7 @@ func Action(ctx *cli.Context) {
 	log.Printf("Final config file:\n%s", newConfFile)
 
 	log.Printf("Starting Riak Stanchion...")
-	startCmd := exec.Command("stanchion", "console")
+	startCmd := exec.Command("start_riak_stanchion")
 	startCmd.Stdout = os.Stdout
 	startCmd.Stderr = os.Stderr
 	if err := startCmd.Start(); err != nil {

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+"$(ls -d /usr/lib/stanchion/erts*)/bin/run_erl" "${TMP_DIR}" "${LOG_DIR}" "exec /usr/sbin/stanchion console"
