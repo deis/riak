@@ -14,16 +14,13 @@ chmod 755 /var/lib/riak /var/log/riak
 # Ensure the Erlang node name is set correctly
 sed -i.bak "s/riak@127.0.0.1/riak@${IP_ADDRESS}/" $CONF_FILE
 
-# Ensure the desired Riak backend is set correctly
-sed -i.bak "s/storage_backend = \(.*\)/storage_backend = ${RIAK_BACKEND}/" $CONF_FILE
-
 if env | grep -q "RIAK_INET_DIST_MIN"; then
   echo "erlang.distribution.port_range.minimum = ${RIAK_INET_DIST_MIN}" >> $CONF_FILE
   echo "erlang.distribution.port_range.maximum = ${RIAK_INET_DIST_MAX}" >> $CONF_FILE
 fi
 
 #configuration for Riak CS
-sed -i.bak "s/storage_backend = bitcask//" $CONF_FILE
+sed -i.bak "s/storage_backend = \(.*\)/d/" $CONF_FILE
 echo "buckets.default.allow_mult = true" >> $CONF_FILE
 touch $ADVANCED_CONF_FILE
 cat << EOF > $ADVANCED_CONF_FILE
