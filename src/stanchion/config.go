@@ -9,6 +9,7 @@ const (
 )
 
 type config struct {
+	ConfFilePath        string `envconfig:"CONF_FILE" required:"true"`
 	NumPorts            int    `envconfig:"NUM_PORTS" required:"true"`
 	RiakHost            string `envconfig:"DEIS_RIAK_SERVICE_HOST" required:"true"`
 	RiakPort            int    `envconfig:"DEIS_RIAK_SERVICE_PORT" required:"true"`

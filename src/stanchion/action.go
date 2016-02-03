@@ -10,19 +10,15 @@ import (
 	"github.com/deis/riak/src/replace"
 )
 
-const (
-	confFilePath = "/etc/stanchion/stanchion.conf"
-)
-
 func Action(ctx *cli.Context) {
 	conf, err := getConfig()
 	if err != nil {
 		log.Printf("Error: getting config (%s)", err)
 		os.Exit(1)
 	}
-	confFile, err := ioutil.ReadFile(confFilePath)
+	confFile, err := ioutil.ReadFile(conf.ConfFilePath)
 	if err != nil {
-		log.Printf("Error: reading config file at %s (%s)", confFilePath, err)
+		log.Printf("Error: reading config file at %s (%s)", conf.ConfFilePath, err)
 		os.Exit(1)
 	}
 
@@ -45,8 +41,8 @@ func Action(ctx *cli.Context) {
 		replace.FmtReplacement("riak_host = 127.0.0.1:8087", "riak_host = %s:%d", conf.RiakHost, conf.RiakPort),
 	}
 	newConfFile := replace.String(string(confFile), replacements...)
-	if err := ioutil.WriteFile(confFilePath, []byte(newConfFile), os.ModePerm); err != nil {
-		log.Printf("Error: writing new config file to %s (%s)", confFilePath, err)
+	if err := ioutil.WriteFile(conf.ConfFilePath, []byte(newConfFile), os.ModePerm); err != nil {
+		log.Printf("Error: writing new config file to %s (%s)", conf.ConfFilePath, err)
 		os.Exit(1)
 	}
 	log.Printf("Final config file:\n%s", newConfFile)
