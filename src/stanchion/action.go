@@ -49,6 +49,7 @@ func Action(ctx *cli.Context) {
 		log.Printf("Error: writing new config file to %s (%s)", confFilePath, err)
 		os.Exit(1)
 	}
+	log.Printf("Final config file:\n%s", newConfFile)
 
 	log.Printf("Starting Riak Stanchion...")
 	startCmd := exec.Command("stanchion", "console")
