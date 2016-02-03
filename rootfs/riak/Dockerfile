@@ -25,8 +25,9 @@ RUN sed -i.bak "s/storage_backend = \(.*\)//" ${CONF_FILE} && \
     echo "javascript.map_pool_size = 0" >> ${CONF_FILE} && \
     echo "javascript.reduce_pool_size = 0" >> ${CONF_FILE} && \
     echo "javascript.hook_pool_size = 0" >> ${CONF_FILE} && \
-    ulimit -n ${NUM_PORTS} && \
-    touch ${ADVANCED_CONF_FILE}
+    ulimit -n ${NUM_PORTS}
+    # ulimit -n ${NUM_PORTS} && \
+    # touch ${ADVANCED_CONF_FILE}
 # this config file has a syntax error, omitting for now
 # ADD etc/advanced.config ${ADVANCED_CONF_FILE}
 ADD bin /bin
