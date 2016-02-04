@@ -1,6 +1,7 @@
 package riak
 
 import (
+	"net"
 	"testing"
 )
 
@@ -20,5 +21,24 @@ func TestGetDiscoveryIP(t *testing.T) {
 	}
 	if addr == "" {
 		t.Errorf("call for hostname google.com returned empty address")
+	}
+	addr, err = getDiscoveryIP("localhost")
+	if err != ErrNoDiscoveryAddrs {
+		t.Errorf("getting IP from loopback address was expected to fail; got %s", addr)
+	}
+	addr, err = getDiscoveryIP(localIP())
+	if err != ErrNoDiscoveryAddrs {
+		t.Errorf("getting IP from local IP address was expected to fail; got %s", addr)
+	}
+
+}
+
+func TestGetLocalIP(t *testing.T) {
+	// We live in a connected world. These tests assume you have a non-loopback address
+	if localIP() == "" {
+		t.Errorf("could not retrieve the local IP address. Are you connected to a network?")
+	}
+	if ip := net.ParseIP(localIP()); ip == nil {
+		t.Errorf("could not parse local IP to a net.IP")
 	}
 }
