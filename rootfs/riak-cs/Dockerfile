@@ -6,9 +6,11 @@ ENV CONF_FILE ${CONF_FOLDER}/riak-cs.conf
 ENV NUM_PORTS 4096
 ENV TMP_DIR /tmp/riak-cs
 ENV LOG_DIR /var/log/riak-cs
-ADD http://s3.amazonaws.com/downloads.basho.com/riak-cs/2.0/2.0.0/ubuntu/trusty/riak-cs_2.0.0-1_amd64.deb ${TARGET_DEB}
-RUN dpkg -i $TARGET_DEB
-RUN rm ${TARGET_DEB} && \
+
+RUN apt-get update && apt-get install -y curl dnsutils && \
+    curl https://packagecloud.io/install/repositories/basho/riak-cs/script.deb.sh | bash && \
+    apt-get install -y riak-cs=2.0.0-1 && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     sed -i.bak "s/stanchion_ssl = on/stanchion_ssl = off/" ${CONF_FILE} && \
     mkdir -p ${TMP_DIR} && \
     mkdir -p ${LOG_DIR}
