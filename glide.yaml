@@ -4,3 +4,4 @@ import:
 - package: github.com/pborman/uuid
 - package: github.com/kelseyhightower/envconfig
 - package: github.com/arschles/assert
+- package: github.com/codegangsta/cli

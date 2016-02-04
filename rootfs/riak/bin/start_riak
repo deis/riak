@@ -1,26 +1,23 @@
 #!/bin/sh
 
-RIAK_BACKEND=${RIAK_BACKEND:-bitcask}
-
 IP_ADDRESS=$(ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
 
 # Ensure correct ownership and permissions on volumes
 chown riak:riak /var/lib/riak /var/log/riak
 chmod 755 /var/lib/riak /var/log/riak
 
-# Open file descriptor limit
-ulimit -n 4096
-
 # Ensure the Erlang node name is set correctly
-sed -i.bak "s/riak@127.0.0.1/riak@${IP_ADDRESS}/" /etc/riak/riak.conf
-
-# Ensure the desired Riak backend is set correctly
-sed -i.bak "s/storage_backend = \(.*\)/storage_backend = ${RIAK_BACKEND}/" /etc/riak/riak.conf
+sed -i.bak "s/riak@127.0.0.1/riak@${IP_ADDRESS}/" $CONF_FILE
 
 if env | grep -q "RIAK_INET_DIST_MIN"; then
-  echo "erlang.distribution.port_range.minimum = ${RIAK_INET_DIST_MIN}" >> /etc/riak/riak.conf
-  echo "erlang.distribution.port_range.maximum = ${RIAK_INET_DIST_MAX}" >> /etc/riak/riak.conf
+  echo "erlang.distribution.port_range.minimum = ${RIAK_INET_DIST_MIN}" >> $CONF_FILE
+  echo "erlang.distribution.port_range.maximum = ${RIAK_INET_DIST_MAX}" >> $CONF_FILE
 fi
+
+echo "config file:"
+cat $CONF_FILE
+
+ulimit -n ${NUM_PORTS}
 
 echo "Starting Riak..."
 # Start Riak

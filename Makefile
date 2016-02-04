@@ -1,17 +1,11 @@
-# Short name: Short name, following [a-zA-Z_], used all over the place.
-# Some uses for short name:
-# - Docker image name
-# - Kubernetes service, rc, pod, secret, volume names
 SHORT_NAME := riak
 
-# SemVer with build information is defined in the SemVer 2 spec, but Docker
-# doesn't allow +, so we use -.
 VERSION ?= git-$(shell git rev-parse --short HEAD)
 
-# Docker Root FS
-BINDIR := ./rootfs
-BINARY_DEST_DIR := ${BINDIR}/bin
+# build information
+BINARY_DEST_DIR := rootfs/bin
 LDFLAGS := "-s -X main.version=${VERSION}"
+TEST_PACKAGES := $(shell ${DEV_ENV_CMD} glide nv)
 
 # Dockerized development environment variables
 REPO_PATH := github.com/deis/${SHORT_NAME}
@@ -20,23 +14,19 @@ DEV_ENV_WORK_DIR := /go/src/${REPO_PATH}
 DEV_ENV_PREFIX := docker run --rm -e GO15VENDOREXPERIMENT=1 -v ${CURDIR}:${DEV_ENV_WORK_DIR} -w ${DEV_ENV_WORK_DIR}
 DEV_ENV_CMD := ${DEV_ENV_PREFIX} ${DEV_ENV_IMAGE}
 
-# Legacy support for DEV_REGISTRY, plus new support for DEIS_REGISTRY.
-DEV_REGISTRY ?= $(eval docker-machine ip deis):5000
-DEIS_REGISTY ?= ${DEV_REGISTRY}/
-IMAGE_PREFIX ?= deis
+# Kubernetes resources
+MANIFESTS_DIR := ${CURDIR}/manifests
+BOOTSTRAP := ${MANIFESTS_DIR}/deis-riak-bootstrap-pod.yaml
+RC := ${MANIFESTS_DIR}/deis-riak-rc.yaml
+STANCHION_RC := ${MANIFESTS_DIR}/deis-riak-stanchion-rc.yaml
+SVC := ${MANIFESTS_DIR}/deis-riak-service.yaml
+DISCO_SVC := ${MANIFESTS_DIR}/deis-riak-discovery-service.yaml
+CLUSTER_SVC := ${MANIFESTS_DIR}/deis-riak-cluster-service.yaml
+CS_SVC := ${MANIFESTS_DIR}/deis-riak-cs-service.yaml
+STANCHION_SVC := ${MANIFESTS_DIR}/deis-riak-stanchion-service.yaml
+ADMIN_USER_SEC := ${MANIFESTS_DIR}/deis-riak-cs-admin-user-secret.yaml
 
-# Kubernetes-specific information for RC, Service, and Image.
-BOOTSTRAP := manifests/deis-${SHORT_NAME}-bootstrap-pod.yaml
-RC := manifests/deis-${SHORT_NAME}-rc.yaml
-SVC := manifests/deis-${SHORT_NAME}-service.yaml
-DISCO_SVC := manifests/deis-${SHORT_NAME}-discovery-service.yaml
-CLUSTER_SVC := manifests/deis-${SHORT_NAME}-cluster-service.yaml
-
-IMAGE := ${DEIS_REGISTRY}${IMAGE_PREFIX}/${SHORT_NAME}:${VERSION}
-
-TEST_PACKAGES := $(shell ${DEV_ENV_CMD} glide nv)
-
-all: build docker-build docker-push
+all: build riak-docker-build riak-cs-docker-build riak-stanchion-docker-build riak-docker-push riak-cs-docker-push riak-stanchion-docker-push
 
 bootstrap:
 		${DEV_ENV_CMD} glide install
@@ -46,41 +36,62 @@ glideup:
 
 build:
 	${DEV_ENV_PREFIX} -e CGO_ENABLED=0 ${DEV_ENV_IMAGE} go build -a -installsuffix cgo -ldflags ${LDFLAGS} -o ${BINARY_DEST_DIR}/boot boot.go
+	# copy the built binary into each Docker filesystem, so the each Dockerfile can ADD it into the respective images
+	mkdir -p rootfs/riak/bin
+	mkdir -p rootfs/riak-cs/bin
+	mkdir -p rootfs/riak-stanchion/bin
+	cp ${BINARY_DEST_DIR}/boot rootfs/riak/bin/boot
+	cp ${BINARY_DEST_DIR}/boot rootfs/riak-cs/bin/boot
+	cp ${BINARY_DEST_DIR}/boot rootfs/riak-stanchion/bin/boot
 
 test:
 	${DEV_ENV_CMD} go test -race ${TEST_PACKAGES}
 
-# For cases where we're building from local
-# We also alter the RC file to set the image name.
-docker-build:
-	docker build --rm -t ${IMAGE} rootfs
-	perl -pi -e "s|[a-z0-9.:]+\/deis\/${SHORT_NAME}:[0-9a-z-.]+|${IMAGE}|g" ${BOOTSTRAP}
-	perl -pi -e "s|[a-z0-9.:]+\/deis\/${SHORT_NAME}:[0-9a-z-.]+|${IMAGE}|g" ${RC}
+riak-build:
+	make -C rootfs/riak build
 
-# Push to a registry that Kubernetes can access.
-docker-push:
-	docker push ${IMAGE}
+riak-docker-build:
+	make -C rootfs/riak docker-build
+
+riak-docker-push:
+	make -C rootfs/riak docker-push
+
+riak-cs-docker-build:
+	make -C rootfs/riak-cs docker-build
+
+riak-cs-docker-push:
+	make -C rootfs/riak-cs docker-push
+
+riak-stanchion-docker-build:
+	make -C rootfs/riak-stanchion docker-build
+
+riak-stanchion-docker-push:
+	make -C rootfs/riak-stanchion docker-push
 
 # Deploy is a Kubernetes-oriented target
-deploy: kube-service kube-rc
+kube-deploy: kube-secrets kube-service kube-rc
 
-# Some things, like services, have to be deployed before pods. This is an
-# example target. Others could perhaps include kube-secret, kube-volume, etc.
+kube-secrets:
+	kubectl create -f ${ADMIN_USER_SEC}
+
 kube-service:
 	kubectl create -f ${SVC}
 	kubectl create -f ${DISCO_SVC}
 	kubectl create -f ${CLUSTER_SVC}
+	kubectl create -f ${CS_SVC}
+	kubectl create -f ${STANCHION_SVC}
 
-# When possible, we deploy with RCs.
 kube-rc:
 	kubectl create -f ${BOOTSTRAP}
 	kubectl create -f ${RC}
+	kubectl create -f ${STANCHION_RC}
 
-# We don't need to delete the bootstrap pod here because it'll get selected by the RC.
 kube-clean:
 	kubectl delete -f ${RC}
+	kubectl delete -f ${STANCHION_RC}
 	kubectl delete -f ${SVC}
 	kubectl delete -f ${DISCO_SVC}
 	kubectl delete -f ${CLUSTER_SVC}
-
-.PHONY: all build docker-compile kube-up kube-down deploy
+	kubectl delete -f ${CS_SVC}
+	kubectl delete -f ${STANCHION_SVC}
+	kubectl delete -f ${ADMIN_USER_SEC}

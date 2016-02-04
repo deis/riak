@@ -66,6 +66,15 @@ $ kubectl --namespace=deis exec $DEIS_RIAK_POD_NAME riak-admin cluster commit
 
 To commit those changes.
 
+## Helpful Links
+
+Below are links to helpful Basho documents related to Riak, Riak CS and Stanchion.
+
+- [Configuring Riak](http://docs.basho.com/riakcs/latest/cookbooks/configuration/Configuring-Riak/) - Official Basho Docs
+- [Configuring Riak CS](http://docs.basho.com/riakcs/latest/cookbooks/configuration/Configuring-Riak-CS/) - Official Basho Docs
+- [Configuring Stanchion](http://docs.basho.com/riakcs/latest/cookbooks/configuration/Configuring-Stanchion/) - Official Basho Docs
+- [Run Riak CS in Docker](https://github.com/hectcastro/docker-riak-cs) - Code for launching a local Riak CS cluster in Docker containers
+
 ## RootFS
 
 All files that are to be packaged into the container should be written

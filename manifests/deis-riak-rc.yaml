@@ -15,7 +15,7 @@ spec:
         name: riak
     spec:
       containers:
-        - name: riak
+        - name: deis-riak
           image: quay.io/deisci/riak:v2-beta
           imagePullPolicy: Always
           env:
@@ -25,9 +25,41 @@ spec:
               value: "6001"
             - name: RIAK_JOIN_WAIT_TIME
               value: "5"
+            - name: ADD_PATHS
+              # must match the mountPath of the riak-scratch volumeMount below
+              value: "/usr/lib/riak-cs/lib/riak_cs-2.0.0/ebin"
           ports:
             - containerPort: 4369
             - containerPort: 6001
             - containerPort: 8087
             - containerPort: 8098
             - containerPort: 8099
+          volumeMounts:
+            - name: riak-scratch
+              mountPath: /usr/lib/riak-cs/lib/riak_cs-2.0.0/ebin
+        - name: deis-riak-cs
+          image: quay.io/deisci/riak-cs:v2-beta
+          imagePullPolicy: Always
+          env:
+            - name: LISTEN_HOST
+              value: "0.0.0.0"
+            - name: LISTEN_PORT
+              value: "8081"
+            - name: ADD_PATHS
+              # must match the mountPath of the riak-scratch volumeMount below
+              value: "/usr/lib/riak-cs/lib/riak_cs-2.0.0/ebin"
+          ports:
+            - containerPort: 8081
+          volumeMounts:
+            - name: riak-cs-admin-user
+              mountPath: /var/run/secrets/deis/riak-cs/admin
+              readOnly: true
+            - name: riak-scratch
+              mountPath: /usr/lib/riak-cs/lib/riak_cs-2.0.0/ebin
+      volumes:
+        - name: riak-cs-admin-user
+          secret:
+            secretName: riak-cs-admin-user
+        # the volume that riak and CS use to communicate with
+        - name: riak-scratch
+          emptyDir: {}

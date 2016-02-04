@@ -1,62 +1,34 @@
 package main
 
 import (
-	"log"
-	"net/http"
 	"os"
 
-	"github.com/deis/riak/chans"
-	"github.com/deis/riak/clustersrv"
-	"github.com/deis/riak/config"
-	"github.com/deis/riak/riak"
+	"github.com/codegangsta/cli"
+	"github.com/deis/riak/src/cs"
+	"github.com/deis/riak/src/riak"
+	"github.com/deis/riak/src/stanchion"
 )
 
 func main() {
-	conf, err := config.Get()
-	if err != nil {
-		log.Printf("Error getting config (%s)", err)
-		os.Exit(1)
+	app := cli.NewApp()
+	app.Name = "Deis Riak"
+	app.Usage = "Binary to launch and configure all Deis Riak components"
+	app.Commands = []cli.Command{
+		{
+			Name:        "riak",
+			Description: "Configures and launches Riak",
+			Action:      riak.Action,
+		},
+		{
+			Name:        "riak-cs",
+			Description: "Configures and launches Riak CS",
+			Action:      cs.Action,
+		},
+		{
+			Name:        "riak-stanchion",
+			Description: "Configures and launches Riak Stanchion",
+			Action:      stanchion.Action,
+		},
 	}
-
-	cmdDoneCh := make(chan error)
-	serverDoneCh := make(chan error)
-	if !conf.RiakMaster {
-		// non-bootstrap nodes should start a riak server and join
-		log.Printf("Starting as a non-bootstrap node")
-		go func() {
-			httpClient := &http.Client{}
-			clusterServerURL := clustersrv.URLFromConfig(conf)
-			if err != nil {
-				cmdDoneCh <- err
-				return
-			}
-
-			if err := riak.Start(); err != nil {
-				cmdDoneCh <- err
-				return
-			}
-
-			if err := riak.Join(httpClient, clusterServerURL); err != nil {
-				cmdDoneCh <- err
-				return
-			}
-		}()
-	} else {
-		// bootstrap nodes should start (not join) a riak server and start the cluster server
-		log.Printf("Starting as a bootstrap node")
-
-		go func() {
-			if err := riak.Start(); err != nil {
-				cmdDoneCh <- err
-				return
-			}
-		}()
-		log.Printf("Cluster server starting on port %d", conf.ClusterServerHTTPPort)
-		go clustersrv.Start(conf.ClusterServerHTTPPort, serverDoneCh)
-	}
-
-	if err := chans.JoinErrs(serverDoneCh, cmdDoneCh); err != nil {
-		log.Println(err)
-		os.Exit(1)
-	}
+	app.Run(os.Args)
 }

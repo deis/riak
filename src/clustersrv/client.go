@@ -5,12 +5,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-
-	"github.com/deis/riak/config"
 )
 
-func URLFromConfig(conf *config.Config) string {
-	return fmt.Sprintf("http://%s:%d", conf.ClusterServerHost, conf.ClusterServerPort)
+func URLFromConfig(clusterSrvHost string, clusterSrvPort int) string {
+	return fmt.Sprintf("http://%s:%d", clusterSrvHost, clusterSrvPort)
 }
 
 func AcquireLock(httpClient *http.Client, clusterSrvURLBase string) (string, error) {

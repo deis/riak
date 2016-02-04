@@ -1,0 +1,4 @@
+#!/bin/sh
+
+ulimit -n ${NUM_PORTS}
+"$(ls -d /usr/lib/riak-cs/erts*)/bin/run_erl" "${TMP_DIR}" "${LOG_DIR}" "exec /usr/sbin/riak-cs console"

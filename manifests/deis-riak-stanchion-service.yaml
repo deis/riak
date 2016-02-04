@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: deis-riak-cluster
+  name: deis-riak-stanchion
   namespace: deis
   labels:
     heritage: deis
 spec:
   ports:
-    - port: 8080
-      targetPort: 8081
+    - port: 8093
+      targetPort: 8093
       name: http
       protocol: TCP
   selector:
-    cluster_server: "true"
+    name: riak-stanchion
