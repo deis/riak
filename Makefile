@@ -50,12 +50,8 @@ build:
 test:
 	${DEV_ENV_CMD} go test -race ${TEST_PACKAGES}
 
-# For cases where we're building from local
-# We also alter the RC file to set the image name.
 docker-build:
 	docker build --rm -t ${IMAGE} rootfs
-	perl -pi -e "s|[a-z0-9.:]+\/deis\/${SHORT_NAME}:[0-9a-z-.]+|${IMAGE}|g" ${BOOTSTRAP}
-	perl -pi -e "s|[a-z0-9.:]+\/deis\/${SHORT_NAME}:[0-9a-z-.]+|${IMAGE}|g" ${RC}
 
 # Push to a registry that Kubernetes can access.
 docker-push:
