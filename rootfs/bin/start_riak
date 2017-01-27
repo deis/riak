@@ -2,7 +2,7 @@
 
 RIAK_BACKEND=${RIAK_BACKEND:-bitcask}
 
-IP_ADDRESS=$(ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
+IP_ADDRESS=$(ip -o -4 route | awk '/default v/{DEV=$5}{if($3 == DEV && $(NF -1) == "src" )print $NF}')
 
 # Ensure correct ownership and permissions on volumes
 chown riak:riak /var/lib/riak /var/log/riak
