@@ -8,6 +8,7 @@ import (
 	"os/exec"
 
 	"github.com/deis/riak/clustersrv"
+	"github.com/deis/riak/util"
 )
 
 type ErrAcquireLock struct {
@@ -16,6 +17,12 @@ type ErrAcquireLock struct {
 
 func (e ErrAcquireLock) Error() string {
 	return fmt.Sprintf("Couldn't acquire the cluster level lock (%s)", e.origErr)
+}
+
+func waitForConvergence(tickDur time.Duration, timeout time.Duration) error {
+	util.Poll(tickDur, timeout, func() bool {
+		//TODO: check riak-admin ring-status call
+	})
 }
 
 // Join acquires the cluster level lock (using httpClient issuing requests against clusterServerBaseURL), then takes the following steps:
