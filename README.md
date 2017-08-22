@@ -1,3 +1,9 @@
+
+|![](https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Warning.svg/156px-Warning.svg.png) | Deis Workflow will soon no longer be maintained.<br />Please [read the announcement](https://deis.com/blog/2017/deis-workflow-final-release/) for more detail. |
+|---:|---|
+| 09/07/2017 | Deis Workflow [v2.18][] final release before entering maintenance mode |
+| 03/01/2018 | End of Workflow maintenance: critical patches no longer merged |
+
 # Riak
 
 [![Build Status](https://travis-ci.org/deis/riak.svg?branch=master)](https://travis-ci.org/deis/riak)
@@ -75,3 +81,5 @@ to the `rootfs/` folder.
 
 Along with unit tests, Deis values functional and integration testing.
 These tests should go in the `_tests` folder.
+
+[v2.18]: https://github.com/deis/workflow/releases/tag/v2.18.0
